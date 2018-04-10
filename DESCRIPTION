@@ -1,0 +1,20 @@
+Package: micar
+Version: 1.0.0
+Title: Mica R
+Author: OBiBa <info@obiba.org>
+Maintainer: OBiBa <info@obiba.org>
+Depends:
+    R (>= 3.0.0),
+    httr
+Imports:
+    jsonlite
+Suggests:
+    knitr
+Description: Client for Mica, the data Web portal for biobanks by OBiBa.
+License: GPL-3 + file LICENSE
+MicaVersion: >= 3.0.0
+URL: http://www.obiba.org
+    https://github.com/obiba/micar
+BugReports: http://jira.obiba.org
+RoxygenNote: 6.0.1
+VignetteBuilder: knitr
