@@ -56,6 +56,7 @@ print.mica <- function(x, ...) {
 #' @title Get the studies
 #' @param mica A Mica object
 #' @param query The search query
+#' @param locale The language for labels (default is "en")
 #' @export
 mica.studies <- function(mica, query=NULL, locale="en") {
   q <- paste0("locale(", locale, "),", query)

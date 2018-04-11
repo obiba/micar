@@ -4,12 +4,14 @@
 \alias{mica.variables}
 \title{Get the variables}
 \usage{
-mica.variables(mica, query = NULL)
+mica.variables(mica, query = NULL, locale = "en")
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
+
+\item{locale}{The language for labels (default is "en")}
 }
 \description{
 Get the variables

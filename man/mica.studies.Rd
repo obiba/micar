@@ -4,12 +4,14 @@
 \alias{mica.studies}
 \title{Get the studies}
 \usage{
-mica.studies(mica, query = NULL)
+mica.studies(mica, query = NULL, locale = "en")
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
+
+\item{locale}{The language for labels (default is "en")}
 }
 \description{
 Get the studies
