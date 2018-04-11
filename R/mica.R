@@ -66,10 +66,10 @@ mica.studies <- function(mica, query=NULL, locale="en") {
   acronym <- c()
   design <- c()
   targetNumber <- c()
-  datasources.questionnaires <- c()
-  datasources.physicalMeasures <- c()
-  datasources.biologicalSamples <- c()
-  datasources.others <- c()
+  dataSources.questionnaires <- c()
+  dataSources.physicalMeasures <- c()
+  dataSources.biologicalSamples <- c()
+  dataSources.others <- c()
   variables <- c()
   collectedDatasets <- c()
   collectedVariables <- c()
@@ -82,10 +82,10 @@ mica.studies <- function(mica, query=NULL, locale="en") {
     acronym <- append(acronym, .extractLabel(locale, s[["acronym"]]))
     design <- append(design, .nullToNA(s[["design"]]))
     targetNumber <- append(targetNumber, .nullToNA(s[["targetNumber"]][["number"]]))
-    datasources.questionnaires <- append(datasources.questionnaires, .nullToNA("questionnaires" %in% s[["dataSources"]]))
-    datasources.physicalMeasures <- append(datasources.physicalMeasures, .nullToNA("physical_measures" %in% s[["dataSources"]]))
-    datasources.biologicalSamples <- append(datasources.biologicalSamples, .nullToNA("biological_samples" %in% s[["dataSources"]]))
-    datasources.others <- append(datasources.others, .nullToNA("others" %in% s[["dataSources"]]))
+    dataSources.questionnaires <- append(dataSources.questionnaires, .nullToNA("questionnaires" %in% s[["dataSources"]]))
+    dataSources.physicalMeasures <- append(dataSources.physicalMeasures, .nullToNA("physical_measures" %in% s[["dataSources"]]))
+    dataSources.biologicalSamples <- append(dataSources.biologicalSamples, .nullToNA("biological_samples" %in% s[["dataSources"]]))
+    dataSources.others <- append(dataSources.others, .nullToNA("others" %in% s[["dataSources"]]))
     counts <- s[["obiba.mica.CountStatsDto.studyCountStats"]]
     variables <- append(variables, .nullToNA(counts[["variables"]]))
     collectedDatasets <- append(collectedDatasets, .nullToNA(counts[["studyDatasets"]]))
@@ -94,7 +94,7 @@ mica.studies <- function(mica, query=NULL, locale="en") {
     dataschemaVariables <- append(dataschemaVariables, .nullToNA(counts[["dataschemaVariables"]]))
   }
   data.frame(id, name, acronym, design, targetNumber, 
-             datasources.questionnaires, datasources.physicalMeasures, datasources.biologicalSamples, datasources.others, 
+             dataSources.questionnaires, dataSources.physicalMeasures, dataSources.biologicalSamples, dataSources.others, 
              variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
 }
 
@@ -130,6 +130,9 @@ mica.variables <- function(mica, query=NULL, locale="en") {
 #' Extract label for locale. If not found, fallback to undefined language label (if any).
 #' @keywords internal
 .extractLabel <- function(locale="en", labels=list()) {
+  if (is.null(labels)) {
+    return(NA)
+  }
   label <- NA
   label.und <- NA
   for (i in 1:length(labels)) {
