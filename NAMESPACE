@@ -3,6 +3,7 @@
 S3method(print,mica)
 export(mica.open)
 export(mica.studies)
+export(mica.taxonomies)
 export(mica.variables)
 import(httr)
 import(jsonlite)

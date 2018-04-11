@@ -128,21 +128,79 @@ mica.variables <- function(mica, query=NULL, locale="en") {
   data.frame(id, name, dataset, study, variableType, label)
 }
 
+
+#' Get the taxonomies
+#' 
+#' @title Get the taxonomies
+#' @param mica A Mica object
+#' @param query The search query
+#' @param locale The language for labels (default is NULL, in which case labels are not included in the result)
+#' @param target What the taxonomy is about: variable (default), dataset, study, network
+#' @param taxonomies Taxonomy names to subset. If NULL or empty al taxonomies are returned
+#' @export
+mica.taxonomies <- function(mica, query=NULL, locale=NULL, target="variable", taxonomies=NULL) {
+  res <- .get(mica, "taxonomies", "_search", query=list(query=query, locale=locale, target=target))
+  taxonomy <- c()
+  taxonomy.title <- c()
+  vocabulary <- c()
+  vocabulary.title <- c()
+  vocabulary.description <- c()
+  term <- c()
+  term.title <- c()
+  term.description <- c()
+  if (length(res)>0) {
+    for (i in 1:length(res)) {
+      taxo <- res[[i]][["taxonomy"]]
+      if ((is.null(taxonomies) || length(taxonomies) == 0 || taxo$name %in% taxonomies) && length(taxo[["vocabularies"]])>0) {
+        for (j in 1:length(taxo[["vocabularies"]])) {
+          voc <- taxo[["vocabularies"]][[j]]
+          if (length(voc[["terms"]])) {
+            for (k in 1:length(voc[["terms"]])) {
+              te <- voc[["terms"]][[k]]
+              taxonomy <- append(taxonomy, taxo$name)
+              vocabulary <- append(vocabulary, voc$name)
+              term <- append(term, te$name)
+              if (!is.null(locale)) {
+                taxonomy.title <- append(taxonomy.title, .extractLabel2(locale, taxo$title))
+                vocabulary.title <- append(vocabulary.title, .extractLabel2(locale, voc$title))
+                vocabulary.description <- append(vocabulary.description, .extractLabel2(locale, voc$description))
+                term.title <- append(term.title, .extractLabel2(locale, te$title))
+                term.description <- append(term.description, .extractLabel2(locale, te$description))  
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  if (is.null(locale)) {
+    data.frame(taxonomy, vocabulary, term)
+  } else {
+    data.frame(taxonomy, taxonomy.title, vocabulary, vocabulary.title, vocabulary.description, term, term.title, term.description)  
+  }
+}
+
 #' Extract label for locale. If not found, fallback to undefined language label (if any).
 #' @keywords internal
-.extractLabel <- function(locale="en", labels=list()) {
-  if (is.null(labels)) {
+.extractLabel2 <- function(locale="en", labels=list(), localeKey="locale", valueKey="text") {
+  .extractLabel(locale, labels, localeKey=localeKey, valueKey=valueKey)
+}
+
+#' Extract label for locale. If not found, fallback to undefined language label (if any).
+#' @keywords internal
+.extractLabel <- function(locale="en", labels=list(), localeKey="lang", valueKey="value") {
+  if (is.null(labels) || length(labels) == 0) {
     return(NA)
   }
   label <- NA
   label.und <- NA
   for (i in 1:length(labels)) {
     l <- labels[[i]]
-    if (l$lang == locale) {
-      label <- l$value
+    if (l[[localeKey]] == locale) {
+      label <- l[[valueKey]]
     }
-    if (l$lang == "und") {
-      label.und <- l$value
+    if (l[[localeKey]] == "und") {
+      label.und <- l[[valueKey]]
     }
   }
   if (is.na(label)) {
