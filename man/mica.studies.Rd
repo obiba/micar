@@ -4,7 +4,7 @@
 \alias{mica.studies}
 \title{Get the studies}
 \usage{
-mica.studies(mica, query = list())
+mica.studies(mica, query = NULL)
 }
 \arguments{
 \item{mica}{A Mica object}

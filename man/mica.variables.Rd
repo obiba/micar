@@ -4,7 +4,7 @@
 \alias{mica.variables}
 \title{Get the variables}
 \usage{
-mica.variables(mica, query = list())
+mica.variables(mica, query = NULL)
 }
 \arguments{
 \item{mica}{A Mica object}

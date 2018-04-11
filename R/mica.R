@@ -8,28 +8,19 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-#' Log in Mica.
+#' Open a connection with Mica.
 #' 
-#' @title Mica login
+#' @title Mica connection
 #' 
-#' @return A mica object or a list of mica objects.
+#' @return A Mica object.
 #' @param username User name in mica. Can be provided by "mica.username" option.
 #' @param password User password in mica. Can be provided by "mica.password" option.
 #' @param url Mica url or list of mica urls. Can be provided by "mica.url" option.
 #' @param opts Curl options. Can be provided by "mica.opts" option.
 #' @export
-mica.login <- function(username=getOption("mica.username", "anonymous"), password=getOption("mica.password", "password"), url=getOption("mica.url"), opts=getOption("mica.opts", list())) {
+mica.open <- function(username=getOption("mica.username", "anonymous"), password=getOption("mica.password", "password"), url=getOption("mica.url"), opts=getOption("mica.opts", list())) {
   if (is.null(url)) stop("mica url is required", call.=FALSE)
-  if(is.list(url)){
-    lapply(url, function(u){mica.login(username, password, u, opts=opts)})
-  } else {
-    .mica.login(username, password, url, opts=opts)
-  }
-}
-
-#' Create the mica object
-#' @keywords internal
-.mica.login <- function(username, password, url, opts=list()) {
+  
   mica <- new.env(parent=globalenv())
   
   # Username
@@ -66,8 +57,45 @@ print.mica <- function(x, ...) {
 #' @param mica A Mica object
 #' @param query The search query
 #' @export
-mica.studies <- function(mica, query=NULL) {
-  .get(mica, "studies", "_rql", query=list(query=query))
+mica.studies <- function(mica, query=NULL, locale="en") {
+  q <- paste0("locale(", locale, "),", query)
+  res <- .get(mica, "studies", "_rql", query=list(query=q))
+  summaries <- res[["studyResultDto"]][["obiba.mica.StudyResultDto.result"]][["summaries"]]
+  id <- c()
+  name <- c()
+  acronym <- c()
+  design <- c()
+  targetNumber <- c()
+  datasources.questionnaires <- c()
+  datasources.physicalMeasures <- c()
+  datasources.biologicalSamples <- c()
+  datasources.others <- c()
+  variables <- c()
+  collectedDatasets <- c()
+  collectedVariables <- c()
+  harmonizedDatasets <- c()
+  dataschemaVariables <- c()
+  for(i in 1:length(summaries)) {
+    s <- summaries[[i]]
+    id <- append(id, s[["id"]])
+    name <- append(name, .extractLabel(locale, s[["name"]]))
+    acronym <- append(acronym, .extractLabel(locale, s[["acronym"]]))
+    design <- append(design, .nullToNA(s[["design"]]))
+    targetNumber <- append(targetNumber, .nullToNA(s[["targetNumber"]][["number"]]))
+    datasources.questionnaires <- append(datasources.questionnaires, .nullToNA("questionnaires" %in% s[["dataSources"]]))
+    datasources.physicalMeasures <- append(datasources.physicalMeasures, .nullToNA("physical_measures" %in% s[["dataSources"]]))
+    datasources.biologicalSamples <- append(datasources.biologicalSamples, .nullToNA("biological_samples" %in% s[["dataSources"]]))
+    datasources.others <- append(datasources.others, .nullToNA("others" %in% s[["dataSources"]]))
+    counts <- s[["obiba.mica.CountStatsDto.studyCountStats"]]
+    variables <- append(variables, .nullToNA(counts[["variables"]]))
+    collectedDatasets <- append(collectedDatasets, .nullToNA(counts[["studyDatasets"]]))
+    collectedVariables <- append(collectedVariables, .nullToNA(counts[["studyVariables"]]))
+    harmonizedDatasets <- append(harmonizedDatasets, .nullToNA(counts[["harmonizationDatasets"]]))
+    dataschemaVariables <- append(dataschemaVariables, .nullToNA(counts[["dataschemaVariables"]]))
+  }
+  data.frame(id, name, acronym, design, targetNumber, 
+             datasources.questionnaires, datasources.physicalMeasures, datasources.biologicalSamples, datasources.others, 
+             variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
 }
 
 #' Get the variables
@@ -75,9 +103,58 @@ mica.studies <- function(mica, query=NULL) {
 #' @title Get the variables
 #' @param mica A Mica object
 #' @param query The search query
+#' @param locale The language for labels (default is "en")
 #' @export
-mica.variables <- function(mica, query=NULL) {
-  .get(mica, "variables", "_rql", query=list(query=query))
+mica.variables <- function(mica, query=NULL, locale="en") {
+  q <- paste0("locale(", locale, "),", query)
+  res <- .get(mica, "variables", "_rql", query=list(query=q))
+  summaries <- res[["variableResultDto"]][["obiba.mica.DatasetVariableResultDto.result"]][["summaries"]]
+  id <- c()
+  name <- c()
+  dataset <- c()
+  study <- c()
+  variableType <- c()
+  label <- c()
+  for(i in 1:length(summaries)) {
+    v <- summaries[[i]]
+    id <- append(id, v[["id"]])
+    name <- append(name, v[["name"]])
+    dataset <- append(dataset, .extractLabel(locale, v[["datasetAcronym"]]))
+    study <- append(study, .extractLabel(locale, v[["studyAcronym"]]))
+    variableType <- append(variableType, v[["variableType"]])
+    label <- append(label, .extractLabel(locale, v[["variableLabel"]]))
+  }
+  data.frame(id, name, dataset, study, variableType, label)
+}
+
+#' Extract label for locale. If not found, fallback to undefined language label (if any).
+#' @keywords internal
+.extractLabel <- function(locale="en", labels=list()) {
+  label <- NA
+  label.und <- NA
+  for (i in 1:length(labels)) {
+    l <- labels[[i]]
+    if (l$lang == locale) {
+      label <- l$value
+    }
+    if (l$lang == "und") {
+      label.und <- l$value
+    }
+  }
+  if (is.na(label)) {
+    label.und
+  } else {
+    label
+  }
+}
+
+#' @keywords internal
+.nullToNA <- function(x) {
+  if (is.null(x)) {
+    NA
+  } else {
+    x
+  }
 }
 
 #' Issues a request to mica for the specified resource
