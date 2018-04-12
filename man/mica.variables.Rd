@@ -4,7 +4,9 @@
 \alias{mica.variables}
 \title{Get the variables}
 \usage{
-mica.variables(mica, query = NULL, locale = "en")
+mica.variables(mica,
+  query = "variable(fields((attributes.label)),sort(id),limit(0,10000))",
+  locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
@@ -12,6 +14,8 @@ mica.variables(mica, query = NULL, locale = "en")
 \item{query}{The search query}
 
 \item{locale}{The language for labels (default is "en")}
+
+\item{df}{Return a data.frame (default is TRUE)}
 }
 \description{
 Get the variables

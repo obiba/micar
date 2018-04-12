@@ -51,52 +51,197 @@ print.mica <- function(x, ...) {
   cat("username:", x$username, "\n")
 }
 
+#' Get the networks
+#' 
+#' @title Get the networks
+#' @param mica A Mica object
+#' @param query The search query
+#' @param locale The language for labels (default is "en")
+#' @param df Return a data.frame (default is TRUE)
+#' @export
+mica.networks <- function(mica, query="network(fields((acronym,name)),sort(id),limit(0,100))", locale="en", df=TRUE) {
+  q <- paste0("locale(", locale, "),", query)
+  res <- .get(mica, "networks", "_rql", query=list(query=q))
+  if (!df) {
+    return(res)
+  }
+  summaries <- res[["networkResultDto"]][["obiba.mica.NetworkResultDto.result"]][["networks"]]
+  if (length(summaries)>0) {
+    id <- rep(NA, length(summaries))
+    name <- rep(NA, length(summaries))
+    acronym <- rep(NA, length(summaries))
+    studies <- rep(NA, length(summaries))
+    variables <- rep(NA, length(summaries))
+    collectedDatasets <- rep(NA, length(summaries))
+    collectedVariables <- rep(NA, length(summaries))
+    harmonizedDatasets <- rep(NA, length(summaries))
+    dataschemaVariables <- rep(NA, length(summaries))
+    if (length(summaries)>0) {
+      for(i in 1:length(summaries)) {
+        n <- summaries[[i]]
+        id[i] <- n[["id"]]
+        name[i] <- .extractLabel(locale, n[["name"]])
+        acronym[i] <- .extractLabel(locale, n[["acronym"]])
+        counts <- n[["obiba.mica.CountStatsDto.networkCountStats"]]
+        studies[i] <- .nullToNA(counts[["studies"]])
+        variables[i] <- .nullToNA(counts[["variables"]])
+        collectedDatasets[i] <- .nullToNA(counts[["studyDatasets"]])
+        collectedVariables[i] <- .nullToNA(counts[["studyVariables"]])
+        harmonizedDatasets[i] <- .nullToNA(counts[["harmonizationDatasets"]])
+        dataschemaVariables[i] <- .nullToNA(counts[["dataschemaVariables"]])
+      }
+    }
+    df <- data.frame(id, name, acronym,
+               studies, variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
+    if (all(is.na(df$name))) {
+      df$name <- NULL
+    }
+    if (all(is.na(df$acronym))) {
+      df$acronym <- NULL
+    }
+    df
+  } else {
+    data.frame()
+  }
+}
+
 #' Get the studies
 #' 
 #' @title Get the studies
 #' @param mica A Mica object
 #' @param query The search query
 #' @param locale The language for labels (default is "en")
+#' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.studies <- function(mica, query=NULL, locale="en") {
+mica.studies <- function(mica, query="study(fields((acronym,name,model.methods.design,populations.dataCollectionEvents.model.dataSources,model.numberOfParticipants.participant)),sort(id),limit(0,100))", locale="en", df=TRUE) {
   q <- paste0("locale(", locale, "),", query)
   res <- .get(mica, "studies", "_rql", query=list(query=q))
-  summaries <- res[["studyResultDto"]][["obiba.mica.StudyResultDto.result"]][["summaries"]]
-  id <- c()
-  name <- c()
-  acronym <- c()
-  design <- c()
-  targetNumber <- c()
-  dataSources.questionnaires <- c()
-  dataSources.physicalMeasures <- c()
-  dataSources.biologicalSamples <- c()
-  dataSources.others <- c()
-  variables <- c()
-  collectedDatasets <- c()
-  collectedVariables <- c()
-  harmonizedDatasets <- c()
-  dataschemaVariables <- c()
-  for(i in 1:length(summaries)) {
-    s <- summaries[[i]]
-    id <- append(id, s[["id"]])
-    name <- append(name, .extractLabel(locale, s[["name"]]))
-    acronym <- append(acronym, .extractLabel(locale, s[["acronym"]]))
-    design <- append(design, .nullToNA(s[["design"]]))
-    targetNumber <- append(targetNumber, .nullToNA(s[["targetNumber"]][["number"]]))
-    dataSources.questionnaires <- append(dataSources.questionnaires, .nullToNA("questionnaires" %in% s[["dataSources"]]))
-    dataSources.physicalMeasures <- append(dataSources.physicalMeasures, .nullToNA("physical_measures" %in% s[["dataSources"]]))
-    dataSources.biologicalSamples <- append(dataSources.biologicalSamples, .nullToNA("biological_samples" %in% s[["dataSources"]]))
-    dataSources.others <- append(dataSources.others, .nullToNA("others" %in% s[["dataSources"]]))
-    counts <- s[["obiba.mica.CountStatsDto.studyCountStats"]]
-    variables <- append(variables, .nullToNA(counts[["variables"]]))
-    collectedDatasets <- append(collectedDatasets, .nullToNA(counts[["studyDatasets"]]))
-    collectedVariables <- append(collectedVariables, .nullToNA(counts[["studyVariables"]]))
-    harmonizedDatasets <- append(harmonizedDatasets, .nullToNA(counts[["harmonizationDatasets"]]))
-    dataschemaVariables <- append(dataschemaVariables, .nullToNA(counts[["dataschemaVariables"]]))
+  if (!df) {
+    return(res)
   }
-  data.frame(id, name, acronym, design, targetNumber, 
-             dataSources.questionnaires, dataSources.physicalMeasures, dataSources.biologicalSamples, dataSources.others, 
-             variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
+  summaries <- res[["studyResultDto"]][["obiba.mica.StudyResultDto.result"]][["summaries"]]
+  if (length(summaries)>0) {
+    id <- rep(NA, length(summaries))
+    name <- rep(NA, length(summaries))
+    acronym <- rep(NA, length(summaries))
+    design <- rep(NA, length(summaries))
+    targetNumber <- rep(NA, length(summaries))
+    dataSources.questionnaires <- rep(NA, length(summaries))
+    dataSources.physicalMeasures <- rep(NA, length(summaries))
+    dataSources.biologicalSamples <- rep(NA, length(summaries))
+    dataSources.others <- rep(NA, length(summaries))
+    variables <- rep(NA, length(summaries))
+    collectedDatasets <- rep(NA, length(summaries))
+    collectedVariables <- rep(NA, length(summaries))
+    harmonizedDatasets <- rep(NA, length(summaries))
+    dataschemaVariables <- rep(NA, length(summaries))
+    hasDataSources <- FALSE
+    for(i in 1:length(summaries)) {
+      s <- summaries[[i]]
+      id[i] <- s[["id"]]
+      name[i] <- .extractLabel(locale, s[["name"]])
+      acronym[i] <- .extractLabel(locale, s[["acronym"]])
+      design[i] <- .nullToNA(s[["design"]]) 
+      targetNumber[i] <- .nullToNA(s[["targetNumber"]][["number"]])
+      if (!is.null(s[["dataSources"]])) {
+        hasDataSources <- TRUE
+        dataSources.questionnaires[i] <- .nullToNA("questionnaires" %in% s[["dataSources"]])
+        dataSources.physicalMeasures[i] <- .nullToNA("physical_measures" %in% s[["dataSources"]])
+        dataSources.biologicalSamples[i] <- .nullToNA("biological_samples" %in% s[["dataSources"]])
+        dataSources.others[i] <- .nullToNA("others" %in% s[["dataSources"]])
+      }
+      counts <- s[["obiba.mica.CountStatsDto.studyCountStats"]]
+      variables[i] <- .nullToNA(counts[["variables"]])
+      collectedDatasets[i] <- .nullToNA(counts[["studyDatasets"]])
+      collectedVariables[i] <- .nullToNA(counts[["studyVariables"]])
+      harmonizedDatasets[i] <- .nullToNA(counts[["harmonizationDatasets"]])
+      dataschemaVariables[i] <- .nullToNA(counts[["dataschemaVariables"]])
+    }
+    df <- data.frame(id, name, acronym, design, targetNumber, 
+               dataSources.questionnaires, dataSources.physicalMeasures, dataSources.biologicalSamples, dataSources.others, 
+               variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
+    if (all(is.na(df$name))) {
+      df$name <- NULL
+    }
+    if (all(is.na(df$acronym))) {
+      df$acronym <- NULL
+    }
+    if (all(is.na(df$design))) {
+      df$design <- NULL
+    }
+    if (all(is.na(df$targetNumber))) {
+      df$targetNumber <- NULL
+    }
+    if (!hasDataSources) {
+      df$dataSources.questionnaires <- NULL
+      df$dataSources.physicalMeasures <- NULL
+      df$dataSources.biologicalSamples <- NULL
+      df$dataSources.others <- NULL
+    }
+    df
+  } else {
+    data.frame()
+  }
+}
+
+#' Get the datasets
+#' 
+#' @title Get the datasets
+#' @param mica A Mica object
+#' @param query The search query
+#' @param locale The language for labels (default is "en")
+#' @param df Return a data.frame (default is TRUE)
+#' @export
+mica.datasets <- function(mica, query="dataset(fields((acronym,name,studyTable,harmonizationTable)),sort(id),limit(0,100))", locale="en", df=TRUE) {
+  q <- paste0("locale(", locale, "),", query)
+  res <- .get(mica, "datasets", "_rql", query=list(query=q))
+  if (!df) {
+    return(res)
+  }
+  summaries <- res[["datasetResultDto"]][["obiba.mica.DatasetResultDto.result"]][["datasets"]]
+  if (length(summaries)>0) {
+    id <- rep(NA, length(summaries))
+    name <- rep(NA, length(summaries))
+    acronym <- rep(NA, length(summaries))
+    variableType <- rep(NA, length(summaries))
+    entityType <- rep(NA, length(summaries))
+    studyId <- rep(NA, length(summaries))
+    variables <- rep(NA, length(summaries))
+    networks <- rep(NA, length(summaries))
+    hasStudyId<- FALSE
+    for(i in 1:length(summaries)) {
+      d <- summaries[[i]]
+      id[i] <- d[["id"]]
+      name[i] <- .extractLabel(locale, d[["name"]])
+      acronym[i] <- .extractLabel(locale, d[["acronym"]])
+      variableType[i] <- d[["variableType"]]
+      entityType[i] <- d[["entityType"]]
+      if (!is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]]) && !is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]])) {
+        hasStudyId <- TRUE
+        studyId[i] <- d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]][["studyId"]]
+      } else if (!is.null(d[["obiba.mica.CollectedDatasetDto.type"]]) && !is.null(d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]])) {
+        hasStudyId <- TRUE
+        studyId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["studyId"]]
+      }
+      counts <- d[["obiba.mica.CountStatsDto.datasetCountStats"]]
+      variables[i] <- .nullToNA(counts[["variables"]])
+      networks[i] <- .nullToNA(counts[["networks"]])
+    }
+    df <- data.frame(id, name, acronym, variableType, entityType, studyId, variables, networks)
+    if (all(is.na(df$name))) {
+      df$name <- NULL
+    }
+    if (all(is.na(df$acronym))) {
+      df$acronym <- NULL
+    }
+    if (!hasStudyId) {
+      df$studyId <- NULL
+      df$networks <- NULL
+    }
+    df
+  } else {
+    data.frame()
+  }
 }
 
 #' Get the variables
@@ -105,27 +250,39 @@ mica.studies <- function(mica, query=NULL, locale="en") {
 #' @param mica A Mica object
 #' @param query The search query
 #' @param locale The language for labels (default is "en")
+#' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.variables <- function(mica, query=NULL, locale="en") {
+mica.variables <- function(mica, query="variable(fields((attributes.label)),sort(id),limit(0,10000))", locale="en", df=TRUE) {
   q <- paste0("locale(", locale, "),", query)
   res <- .get(mica, "variables", "_rql", query=list(query=q))
-  summaries <- res[["variableResultDto"]][["obiba.mica.DatasetVariableResultDto.result"]][["summaries"]]
-  id <- c()
-  name <- c()
-  dataset <- c()
-  study <- c()
-  variableType <- c()
-  label <- c()
-  for(i in 1:length(summaries)) {
-    v <- summaries[[i]]
-    id <- append(id, v[["id"]])
-    name <- append(name, v[["name"]])
-    dataset <- append(dataset, .extractLabel(locale, v[["datasetAcronym"]]))
-    study <- append(study, .extractLabel(locale, v[["studyAcronym"]]))
-    variableType <- append(variableType, v[["variableType"]])
-    label <- append(label, .extractLabel(locale, v[["variableLabel"]]))
+  if (!df) {
+    return(res)
   }
-  data.frame(id, name, dataset, study, variableType, label)
+  summaries <- res[["variableResultDto"]][["obiba.mica.DatasetVariableResultDto.result"]][["summaries"]]
+  if (length(summaries)>0) {
+    id <- rep(NA, length(summaries))
+    name <- rep(NA, length(summaries))
+    datasetId <- rep(NA, length(summaries))
+    studyId <- rep(NA, length(summaries))
+    variableType <- rep(NA, length(summaries))
+    label <- rep(NA, length(summaries))
+    for(i in 1:length(summaries)) {
+      v <- summaries[[i]]
+      id[i] <- v[["id"]]
+      name[i] <- v[["name"]]
+      datasetId[i] <- v[["datasetId"]]
+      studyId[i] <- v[["studyId"]]
+      variableType[i] <- v[["variableType"]]
+      label[i] <- .extractLabel(locale, v[["variableLabel"]])
+    }
+    df <- data.frame(id, name, variableType, label, datasetId, studyId)
+    if (all(is.na(df$label))) {
+      df$label <- NULL
+    }
+    df
+  } else {
+    data.frame()
+  }
 }
 
 
@@ -137,18 +294,22 @@ mica.variables <- function(mica, query=NULL, locale="en") {
 #' @param locale The language for labels (default is NULL, in which case labels are not included in the result)
 #' @param target What the taxonomy is about: variable (default), dataset, study, network
 #' @param taxonomies Taxonomy names to subset. If NULL or empty al taxonomies are returned
+#' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.taxonomies <- function(mica, query=NULL, locale=NULL, target="variable", taxonomies=NULL) {
+mica.taxonomies <- function(mica, query=NULL, locale=NULL, target="variable", taxonomies=NULL, df=TRUE) {
   res <- .get(mica, "taxonomies", "_search", query=list(query=query, locale=locale, target=target))
-  taxonomy <- c()
-  taxonomy.title <- c()
-  vocabulary <- c()
-  vocabulary.title <- c()
-  vocabulary.description <- c()
-  term <- c()
-  term.title <- c()
-  term.description <- c()
+  if (!df) {
+    return(res)
+  }
   if (length(res)>0) {
+    taxonomy <- c()
+    taxonomy.title <- c()
+    vocabulary <- c()
+    vocabulary.title <- c()
+    vocabulary.description <- c()
+    term <- c()
+    term.title <- c()
+    term.description <- c()
     for (i in 1:length(res)) {
       taxo <- res[[i]][["taxonomy"]]
       if ((is.null(taxonomies) || length(taxonomies) == 0 || taxo$name %in% taxonomies) && length(taxo[["vocabularies"]])>0) {
@@ -172,11 +333,13 @@ mica.taxonomies <- function(mica, query=NULL, locale=NULL, target="variable", ta
         }
       }
     }
-  }
-  if (is.null(locale)) {
-    data.frame(taxonomy, vocabulary, term)
+    if (is.null(locale)) {
+      data.frame(taxonomy, vocabulary, term)
+    } else {
+      data.frame(taxonomy, taxonomy.title, vocabulary, vocabulary.title, vocabulary.description, term, term.title, term.description)  
+    }
   } else {
-    data.frame(taxonomy, taxonomy.title, vocabulary, vocabulary.title, vocabulary.description, term, term.title, term.description)  
+    data.frame()
   }
 }
 

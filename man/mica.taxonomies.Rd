@@ -4,16 +4,21 @@
 \alias{mica.taxonomies}
 \title{Get the taxonomies}
 \usage{
-mica.taxonomies(mica, query = NULL, locale = "en", target = "variable")
+mica.taxonomies(mica, query = NULL, locale = NULL, target = "variable",
+  taxonomies = NULL, df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
 
-\item{locale}{The language for labels (default is "en")}
+\item{locale}{The language for labels (default is NULL, in which case labels are not included in the result)}
 
 \item{target}{What the taxonomy is about: variable (default), dataset, study, network}
+
+\item{taxonomies}{Taxonomy names to subset. If NULL or empty al taxonomies are returned}
+
+\item{df}{Return a data.frame (default is TRUE)}
 }
 \description{
 Get the taxonomies
