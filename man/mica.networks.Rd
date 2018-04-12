@@ -5,7 +5,7 @@
 \title{Get the networks}
 \usage{
 mica.networks(mica,
-  query = "network(fields((acronym,name)),sort(id),limit(0,100))",
+  query = "network(fields((acronym,name,studyIds)),sort(id),limit(0,100))",
   locale = "en", df = TRUE)
 }
 \arguments{
