@@ -59,7 +59,7 @@ print.mica <- function(x, ...) {
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.networks <- function(mica, query="network(fields((acronym,name)),sort(id),limit(0,100))", locale="en", df=TRUE) {
+mica.networks <- function(mica, query="network(fields((acronym,name,studyIds)),sort(id),limit(0,100))", locale="en", df=TRUE) {
   q <- paste0("locale(", locale, "),", query)
   res <- .get(mica, "networks", "_rql", query=list(query=q))
   if (!df) {
