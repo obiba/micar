@@ -115,6 +115,13 @@ print.mica <- function(x, ...) {
   if ("networkResultDto" %in% names(results)) {
     message("networks: ", results[["networkResultDto"]][["totalHits"]], "/", results[["networkResultDto"]][["totalCount"]])
   }
+  if ("error" %in% names(results)) {
+    if ("message" %in% names(results)) {
+      message("error: ", results$message)
+    } else {
+      message("error: ", results$error)  
+    }
+  }
 }
 
 #' Verbose flag
