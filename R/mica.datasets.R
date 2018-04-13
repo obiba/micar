@@ -28,6 +28,7 @@ mica.datasets <- function(mica, query="dataset()",
   if (!df) {
     return(res)
   }
+  .reportListMetrics(res)
   summaries <- res[["datasetResultDto"]][["obiba.mica.DatasetResultDto.result"]][["datasets"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))

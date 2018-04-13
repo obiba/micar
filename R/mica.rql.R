@@ -29,7 +29,7 @@
     q <- paste0(target, "(", statement, "),", q)
   }
   q <- paste0(q, ",locale(", locale, ")")
-  message(paste0("query=",q))
+  message("query: ",q)
   q
 }
 

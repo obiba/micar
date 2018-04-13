@@ -28,6 +28,7 @@ mica.networks <- function(mica, query="network()",
   if (!df) {
     return(res)
   }
+  .reportListMetrics(res)
   summaries <- res[["networkResultDto"]][["obiba.mica.NetworkResultDto.result"]][["networks"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))

@@ -101,6 +101,22 @@ print.mica <- function(x, ...) {
   }
 }
 
+#' @keywords internal
+.reportListMetrics <- function(results){
+  if ("variableResultDto" %in% names(results)) {
+    message("variables: ", results[["variableResultDto"]][["totalHits"]], "/", results[["variableResultDto"]][["totalCount"]])
+  }
+  if ("datasetResultDto" %in% names(results)) {
+    message("datasets: ", results[["datasetResultDto"]][["totalHits"]], "/", results[["datasetResultDto"]][["totalCount"]])
+  }
+  if ("studyResultDto" %in% names(results)) {
+    message("studies: ", results[["studyResultDto"]][["totalHits"]], "/", results[["studyResultDto"]][["totalCount"]])
+  }
+  if ("networkResultDto" %in% names(results)) {
+    message("networks: ", results[["networkResultDto"]][["totalHits"]], "/", results[["networkResultDto"]][["totalCount"]])
+  }
+}
+
 #' Verbose flag
 #' @import httr
 #' @keywords internal

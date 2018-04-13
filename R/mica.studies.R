@@ -29,6 +29,7 @@ mica.studies <- function(mica, query="study()",
   if (!df) {
     return(res)
   }
+  .reportListMetrics(res)
   summaries <- res[["studyResultDto"]][["obiba.mica.StudyResultDto.result"]][["summaries"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
