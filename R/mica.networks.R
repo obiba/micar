@@ -21,7 +21,7 @@
 #' @param df Return a data.frame (default is TRUE)
 #' @export
 mica.networks <- function(mica, query="network()", 
-                          select=list("acronym", "name", "studyIds"), sort=list("id"), 
+                          select=list("acronym", "name", "studyIds","model"), sort=list("id"), 
                           from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "network", select, sort, from, limit, locale)
   res <- .get(mica, "networks", "_rql", query=list(query=q))
@@ -34,6 +34,7 @@ mica.networks <- function(mica, query="network()",
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
     acronym <- rep(NA, length(summaries))
+    model <- list()
     studies <- rep(NA, length(summaries))
     variables <- rep(NA, length(summaries))
     collectedDatasets <- rep(NA, length(summaries))
@@ -46,6 +47,17 @@ mica.networks <- function(mica, query="network()",
         id[i] <- n[["id"]]
         name[i] <- .extractLabel(locale, n[["name"]])
         acronym[i] <- .extractLabel(locale, n[["acronym"]])
+        if (!is.null(n[["content"]])) {
+          ct <- .flatten(jsonlite::fromJSON(n[["content"]]))
+          for (key in names(ct)) {
+            if (!(key %in% names(model))) {
+              d <- list()
+              d[[key]] <- rep(NA, length(summaries))
+              model <- append(model, d)
+            }
+            model[[key]][i] <- ct[[key]]
+          }
+        }
         counts <- n[["obiba.mica.CountStatsDto.networkCountStats"]]
         studies[i] <- .nullToNA(counts[["studies"]])
         variables[i] <- .nullToNA(counts[["variables"]])
@@ -62,6 +74,9 @@ mica.networks <- function(mica, query="network()",
     }
     if (all(is.na(df$acronym))) {
       df$acronym <- NULL
+    }
+    for (col in names(model)) {
+      df[[col]] <- model[[col]]
     }
     df
   } else {

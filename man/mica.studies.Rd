@@ -5,9 +5,8 @@
 \title{Get the studies}
 \usage{
 mica.studies(mica, query = "study()", select = list("acronym", "name",
-  "model.methods.design", "populations.dataCollectionEvents.model.dataSources",
-  "model.numberOfParticipants.participant"), sort = list("id"), from = 0,
-  limit = 100, locale = "en", df = TRUE)
+  "model", "populations.dataCollectionEvents.model.dataSources"),
+  sort = list("id"), from = 0, limit = 100, locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}

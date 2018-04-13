@@ -21,7 +21,7 @@
 #' @param df Return a data.frame (default is TRUE)
 #' @export
 mica.studies <- function(mica, query="study()",
-                         select=list("acronym","name","model.methods.design","populations.dataCollectionEvents.model.dataSources","model.numberOfParticipants.participant"), 
+                         select=list("acronym","name","model","populations.dataCollectionEvents.model.dataSources"), 
                          sort=list("id"), 
                          from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "study", select, sort, from, limit, locale)
@@ -37,16 +37,13 @@ mica.studies <- function(mica, query="study()",
     acronym <- rep(NA, length(summaries))
     design <- rep(NA, length(summaries))
     targetNumber <- rep(NA, length(summaries))
-    dataSources.questionnaires <- rep(NA, length(summaries))
-    dataSources.physicalMeasures <- rep(NA, length(summaries))
-    dataSources.biologicalSamples <- rep(NA, length(summaries))
-    dataSources.others <- rep(NA, length(summaries))
+    dataSources <- list()
+    model <- list()
     variables <- rep(NA, length(summaries))
     collectedDatasets <- rep(NA, length(summaries))
     collectedVariables <- rep(NA, length(summaries))
     harmonizedDatasets <- rep(NA, length(summaries))
     dataschemaVariables <- rep(NA, length(summaries))
-    hasDataSources <- FALSE
     for(i in 1:length(summaries)) {
       s <- summaries[[i]]
       id[i] <- s[["id"]]
@@ -55,11 +52,26 @@ mica.studies <- function(mica, query="study()",
       design[i] <- .nullToNA(s[["design"]]) 
       targetNumber[i] <- .nullToNA(s[["targetNumber"]][["number"]])
       if (!is.null(s[["dataSources"]])) {
-        hasDataSources <- TRUE
-        dataSources.questionnaires[i] <- .nullToNA("questionnaires" %in% s[["dataSources"]])
-        dataSources.physicalMeasures[i] <- .nullToNA("physical_measures" %in% s[["dataSources"]])
-        dataSources.biologicalSamples[i] <- .nullToNA("biological_samples" %in% s[["dataSources"]])
-        dataSources.others[i] <- .nullToNA("others" %in% s[["dataSources"]])
+        for (ds in s[["dataSources"]]) {
+          key <- paste0("dataSources.",ds)
+          if (!(key %in% names(dataSources))) {
+            d <- list()
+            d[[key]] <- rep(FALSE, length(summaries))
+            dataSources <- append(dataSources, d)
+          }
+          dataSources[[key]][i] <- TRUE
+        }
+      }
+      if (!is.null(s[["content"]])) {
+        ct <- .flatten(jsonlite::fromJSON(s[["content"]]))
+        for (key in names(ct)) {
+          if (!(key %in% names(model))) {
+            d <- list()
+            d[[key]] <- rep(NA, length(summaries))
+            model <- append(model, d)
+          }
+          model[[key]][i] <- ct[[key]]
+        }
       }
       counts <- s[["obiba.mica.CountStatsDto.studyCountStats"]]
       variables[i] <- .nullToNA(counts[["variables"]])
@@ -68,8 +80,7 @@ mica.studies <- function(mica, query="study()",
       harmonizedDatasets[i] <- .nullToNA(counts[["harmonizationDatasets"]])
       dataschemaVariables[i] <- .nullToNA(counts[["dataschemaVariables"]])
     }
-    df <- data.frame(id, name, acronym, design, targetNumber, 
-                     dataSources.questionnaires, dataSources.physicalMeasures, dataSources.biologicalSamples, dataSources.others, 
+    df <- data.frame(id, name, acronym, 
                      variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
     if (all(is.na(df$name))) {
       df$name <- NULL
@@ -77,17 +88,18 @@ mica.studies <- function(mica, query="study()",
     if (all(is.na(df$acronym))) {
       df$acronym <- NULL
     }
-    if (all(is.na(df$design))) {
-      df$design <- NULL
+    for (col in names(dataSources)) {
+      df[[col]] <- dataSources[[col]]
     }
-    if (all(is.na(df$targetNumber))) {
-      df$targetNumber <- NULL
+    for (col in names(model)) {
+      df[[col]] <- model[[col]]
     }
-    if (!hasDataSources) {
-      df$dataSources.questionnaires <- NULL
-      df$dataSources.physicalMeasures <- NULL
-      df$dataSources.biologicalSamples <- NULL
-      df$dataSources.others <- NULL
+    # back compatibility
+    if (!("methods.design" %in% names(model)) && !all(is.na(design))) {
+      df[["methods.design"]] <- design
+    }
+    if (!("numberOfParticipants.participant.number" %in% names(model)) && !all(is.na(targetNumber))) {
+      df[["numberOfParticipants.participant.number"]] <- targetNumber
     }
     df
   } else {

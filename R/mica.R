@@ -101,6 +101,7 @@ print.mica <- function(x, ...) {
   }
 }
 
+#' Display search result metrics
 #' @keywords internal
 .reportListMetrics <- function(results){
   if ("variableResultDto" %in% names(results)) {
@@ -122,6 +123,25 @@ print.mica <- function(x, ...) {
       message("error: ", results$error)  
     }
   }
+}
+
+#' Flatten a list hierarchy
+#' @keywords internal
+.flatten <- function(content) {
+  rval <- list()
+  for (n in names(content)) {
+    val <- content[[n]]
+    if (!is.list(val)) {
+      rval[[n]] <- ifelse(is.null(val), NA, ifelse(length(val)<2 && (is.logical(val) || is.numeric(val)), val, paste(val, collapse = "|")))
+    } else {
+      subct <- .flatten(val)
+      for (subn in names(subct)) {
+        k <- paste0(n, ".", subn)
+        rval[[k]] <- subct[[subn]]
+      }
+    }
+  }
+  rval
 }
 
 #' Verbose flag

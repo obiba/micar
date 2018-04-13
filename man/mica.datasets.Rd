@@ -5,7 +5,7 @@
 \title{Get the datasets}
 \usage{
 mica.datasets(mica, query = "dataset()", select = list("acronym", "name",
-  "studyTable", "harmonizationTable"), sort = list("id"), from = 0,
+  "studyTable", "harmonizationTable", "model"), sort = list("id"), from = 0,
   limit = 10000, locale = "en", df = TRUE)
 }
 \arguments{
