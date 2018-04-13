@@ -10,5 +10,5 @@ mica.logout(mica)
 \item{mica}{A Mica object}
 }
 \description{
-Close connection and release resources of Mica
+Close connection and release resources of Mica.
 }

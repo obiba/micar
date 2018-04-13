@@ -4,14 +4,22 @@
 \alias{mica.networks}
 \title{Get the networks}
 \usage{
-mica.networks(mica,
-  query = "network(fields((acronym,name,studyIds)),sort(id),limit(0,100))",
-  locale = "en", df = TRUE)
+mica.networks(mica, query = "network()", select = list("acronym", "name",
+  "studyIds"), sort = list("id"), from = 0, limit = 100, locale = "en",
+  df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
+
+\item{select}{The fields to be extracted}
+
+\item{sort}{The fields to sort by}
+
+\item{from}{From item}
+
+\item{limit}{Max number of items}
 
 \item{locale}{The language for labels (default is "en")}
 

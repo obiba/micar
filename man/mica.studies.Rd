@@ -4,14 +4,23 @@
 \alias{mica.studies}
 \title{Get the studies}
 \usage{
-mica.studies(mica,
-  query = "study(fields((acronym,name,model.methods.design,populations.dataCollectionEvents.model.dataSources,model.numberOfParticipants.participant)),sort(id),limit(0,100))",
-  locale = "en", df = TRUE)
+mica.studies(mica, query = "study()", select = list("acronym", "name",
+  "model.methods.design", "populations.dataCollectionEvents.model.dataSources",
+  "model.numberOfParticipants.participant"), sort = list("id"), from = 0,
+  limit = 100, locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
+
+\item{select}{The fields to be extracted}
+
+\item{sort}{The fields to sort by}
+
+\item{from}{From item}
+
+\item{limit}{Max number of items}
 
 \item{locale}{The language for labels (default is "en")}
 

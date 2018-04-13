@@ -13,11 +13,17 @@
 #' @title Get the datasets
 #' @param mica A Mica object
 #' @param query The search query
+#' @param select The fields to be extracted
+#' @param sort The fields to sort by
+#' @param from From item
+#' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.datasets <- function(mica, query="dataset(fields((acronym,name,studyTable,harmonizationTable)),sort(id),limit(0,100))", locale="en", df=TRUE) {
-  q <- paste0("locale(", locale, "),", query)
+mica.datasets <- function(mica, query="dataset()", 
+                          select=list("acronym","name","studyTable","harmonizationTable"), sort=list("id"), 
+                          from=0, limit=10000, locale="en", df=TRUE) {
+  q <- .append.rql(query, "dataset", select, sort, from, limit, locale)
   res <- .get(mica, "datasets", "_rql", query=list(query=q))
   if (!df) {
     return(res)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mica.R
 \name{mica.login}
 \alias{mica.login}
-\title{Mica connection}
+\title{Open connection with Mica}
 \usage{
 mica.login(username = getOption("mica.username", "anonymous"),
   password = getOption("mica.password", "password"),
@@ -21,5 +21,5 @@ mica.login(username = getOption("mica.username", "anonymous"),
 A Mica object.
 }
 \description{
-Open a connection with Mica.
+Open a connection with Mica and returns a Mica object.
 }

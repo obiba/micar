@@ -4,14 +4,22 @@
 \alias{mica.datasets}
 \title{Get the datasets}
 \usage{
-mica.datasets(mica,
-  query = "dataset(fields((acronym,name,studyTable,harmonizationTable)),sort(id),limit(0,100))",
-  locale = "en", df = TRUE)
+mica.datasets(mica, query = "dataset()", select = list("acronym", "name",
+  "studyTable", "harmonizationTable"), sort = list("id"), from = 0,
+  limit = 10000, locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
+
+\item{select}{The fields to be extracted}
+
+\item{sort}{The fields to sort by}
+
+\item{from}{From item}
+
+\item{limit}{Max number of items}
 
 \item{locale}{The language for labels (default is "en")}
 

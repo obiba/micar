@@ -4,14 +4,22 @@
 \alias{mica.variables}
 \title{Get the variables}
 \usage{
-mica.variables(mica,
-  query = "variable(fields((attributes.label)),sort(id),limit(0,10000))",
-  locale = "en", df = TRUE)
+mica.variables(mica, query = "variable()",
+  select = list("attributes.label"), sort = list("id"), from = 0,
+  limit = 10000, locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
 
 \item{query}{The search query}
+
+\item{select}{The fields to be extracted}
+
+\item{sort}{The fields to sort by}
+
+\item{from}{From item}
+
+\item{limit}{Max number of items}
 
 \item{locale}{The language for labels (default is "en")}
 

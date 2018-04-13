@@ -8,9 +8,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-#' Open a connection with Mica.
+#' Open a connection with Mica and returns a Mica object.
 #' 
-#' @title Mica connection
+#' @title Open connection with Mica
 #' 
 #' @return A Mica object.
 #' @param username User name in mica. Can be provided by "mica.username" option.
@@ -34,12 +34,12 @@ mica.login <- function(username=getOption("mica.username", "anonymous"), passwor
   class(mica) <- "mica"
   
   r <- GET(.url(mica, "config"), httr::add_headers(Authorization = mica$authorization), .verbose())
-  .handleResponse(mica, r)
+  mica$config <- .handleResponse(mica, r)
   
   mica
 }
 
-#' Close connection and release resources of Mica
+#' Close connection and release resources of Mica.
 #' 
 #' @title Close connection with Mica
 #' @param mica A Mica object

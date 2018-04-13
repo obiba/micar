@@ -13,11 +13,17 @@
 #' @title Get the networks
 #' @param mica A Mica object
 #' @param query The search query
+#' @param select The fields to be extracted
+#' @param sort The fields to sort by
+#' @param from From item
+#' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.networks <- function(mica, query="network(fields((acronym,name,studyIds)),sort(id),limit(0,100))", locale="en", df=TRUE) {
-  q <- paste0("locale(", locale, "),", query)
+mica.networks <- function(mica, query="network()", 
+                          select=list("acronym", "name", "studyIds"), sort=list("id"), 
+                          from=0, limit=100, locale="en", df=TRUE) {
+  q <- .append.rql(query, "network", select, sort, from, limit, locale)
   res <- .get(mica, "networks", "_rql", query=list(query=q))
   if (!df) {
     return(res)

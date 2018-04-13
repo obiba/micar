@@ -13,11 +13,18 @@
 #' @title Get the studies
 #' @param mica A Mica object
 #' @param query The search query
+#' @param select The fields to be extracted
+#' @param sort The fields to sort by
+#' @param from From item
+#' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.studies <- function(mica, query="study(fields((acronym,name,model.methods.design,populations.dataCollectionEvents.model.dataSources,model.numberOfParticipants.participant)),sort(id),limit(0,100))", locale="en", df=TRUE) {
-  q <- paste0("locale(", locale, "),", query)
+mica.studies <- function(mica, query="study()",
+                         select=list("acronym","name","model.methods.design","populations.dataCollectionEvents.model.dataSources","model.numberOfParticipants.participant"), 
+                         sort=list("id"), 
+                         from=0, limit=100, locale="en", df=TRUE) {
+  q <- .append.rql(query, "study", select, sort, from, limit, locale)
   res <- .get(mica, "studies", "_rql", query=list(query=q))
   if (!df) {
     return(res)
