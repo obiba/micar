@@ -13,7 +13,7 @@
 .append.rql <- function(query, target, select, sort, from, limit, locale) {
   f <- paste0(.as.rql("fields(", select),")")
   s <- .as.rql("sort", sort)
-  l <- paste0("limit(", from,",", limit, ")")
+  l <- paste0("limit(", format(from, scientific = F),",", format(limit, scientific = F), ")")
   statement <- paste(f,l,s, sep=",")
   # normalize
   q <- query
