@@ -26,5 +26,5 @@ mica.study.populations(mica, query = "study()",
 \item{df}{Return a data.frame (default is TRUE)}
 }
 \description{
-Get the study populations. Note that the populations are not fetched directly, they extracted from study search results.
+Get the study populations. Note that the populations are not fetched directly, they are extracted from study search results.
 }

@@ -8,7 +8,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-#' Get the study populations. Note that the populations are not fetched directly, they extracted from study search results.
+#' Get the study populations. Note that the populations are not fetched directly, they are extracted from study search results.
 #' 
 #' @title Get the study populations
 #' @param mica A Mica object
@@ -41,15 +41,15 @@ mica.study.populations <- function(mica, query="study()",
     name <- rep(NA, populationsCount)
     studyId <- rep(NA, populationsCount)
     model <- list()
-    popIndex <- 0
+    idx <- 0
     for(i in 1:length(summaries)) {
       s <- summaries[[i]]
       if (!is.null(s$populationSummaries)) {
         for (pop in s$populationSummaries) {
-          popIndex <- popIndex + 1
-          id[popIndex] <- paste0(s[["id"]], ":", pop[["id"]])
-          name[popIndex] <- .extractLabel(locale, pop[["name"]])
-          studyId[[popIndex]] <- s[["id"]]
+          idx <- idx + 1
+          id[idx] <- paste0(s[["id"]], ":", pop[["id"]])
+          name[idx] <- .extractLabel(locale, pop[["name"]])
+          studyId[[idx]] <- s[["id"]]
           if (!is.null(pop[["content"]])) {
             ct <- .flatten(jsonlite::fromJSON(pop[["content"]]))
             for (key in names(ct)) {
@@ -58,7 +58,7 @@ mica.study.populations <- function(mica, query="study()",
                 d[[key]] <- rep(NA, populationsCount)
                 model <- append(model, d)
               }
-              model[[key]][popIndex] <- ct[[key]]
+              model[[key]][idx] <- ct[[key]]
             }
           }
         }
