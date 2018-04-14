@@ -116,13 +116,6 @@ print.mica <- function(x, ...) {
   if ("networkResultDto" %in% names(results)) {
     message("networks: ", results[["networkResultDto"]][["totalHits"]], "/", results[["networkResultDto"]][["totalCount"]])
   }
-  if ("error" %in% names(results)) {
-    if ("message" %in% names(results)) {
-      message("error: ", results$message)
-    } else {
-      message("error: ", results$error)  
-    }
-  }
 }
 
 #' Flatten a list hierarchy
@@ -167,13 +160,25 @@ print.mica <- function(x, ...) {
 #' @import httr
 #' @keywords internal
 .handleResponse <- function(mica, response) {
-  headers <- httr::headers(response)
   if (is.null(mica$version) || is.na(mica$version)) {
+    headers <- httr::headers(response)
     mica$version <- as.character(headers[tolower('X-Mica-Version')])
+  }
+  content <- content(response)
+  if (response$status>=300) {
+    if ("error" %in% names(content)) {
+      if ("message" %in% names(content)) {
+        stop(content$message, call.=FALSE)
+      } else {
+        stop(content$error, call.=FALSE)  
+      }
+    } else {
+      stop(response$status, call.=FALSE)
+    }
   }
   cookies <- httr::cookies(response)
   mica$sid <- .extractMicaSessionId(cookies)
-  content(response)
+  content
 }
 
 #' Extract micasid from cookie data frame.
