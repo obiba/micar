@@ -37,6 +37,8 @@ mica.datasets <- function(mica, query="dataset()",
     variableType <- rep(NA, length(summaries))
     entityType <- rep(NA, length(summaries))
     studyId <- rep(NA, length(summaries))
+    populationId <- rep(NA, length(summaries))
+    dceId <- rep(NA, length(summaries))
     model <- list()
     variables <- rep(NA, length(summaries))
     networks <- rep(NA, length(summaries))
@@ -51,9 +53,12 @@ mica.datasets <- function(mica, query="dataset()",
       if (!is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]]) && !is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]])) {
         hasStudyId <- TRUE
         studyId[i] <- d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]][["studyId"]]
+        populationId[i] <- paste0(studyId[i], ":", d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]][["populationId"]])
       } else if (!is.null(d[["obiba.mica.CollectedDatasetDto.type"]]) && !is.null(d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]])) {
         hasStudyId <- TRUE
         studyId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["studyId"]]
+        populationId[i] <- paste0(studyId[i], ":", d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["populationId"]])
+        dceId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["dceId"]]
       }
       if (!is.null(d[["content"]])) {
         ct <- .flatten(jsonlite::fromJSON(d[["content"]]))
@@ -70,7 +75,7 @@ mica.datasets <- function(mica, query="dataset()",
       variables[i] <- .nullToNA(counts[["variables"]])
       networks[i] <- .nullToNA(counts[["networks"]])
     }
-    df <- data.frame(id, name, acronym, variableType, entityType, studyId, variables, networks)
+    df <- data.frame(id, name, acronym, variableType, entityType, studyId, populationId, dceId, variables, networks)
     if (all(is.na(df$name))) {
       df$name <- NULL
     }
