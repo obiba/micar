@@ -34,6 +34,7 @@ mica.networks <- function(mica, query="network()",
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
     acronym <- rep(NA, length(summaries))
+    studyIds <- rep(NA, length(summaries))
     model <- list()
     studies <- rep(NA, length(summaries))
     variables <- rep(NA, length(summaries))
@@ -47,6 +48,7 @@ mica.networks <- function(mica, query="network()",
         id[i] <- n[["id"]]
         name[i] <- .extractLabel(locale, n[["name"]])
         acronym[i] <- .extractLabel(locale, n[["acronym"]])
+        studyIds[i] <- paste(n[["studyIds"]], collapse = "|")
         if (!is.null(n[["content"]])) {
           ct <- .flatten(jsonlite::fromJSON(n[["content"]]))
           for (key in names(ct)) {
@@ -67,7 +69,7 @@ mica.networks <- function(mica, query="network()",
         dataschemaVariables[i] <- .nullToNA(counts[["dataschemaVariables"]])
       }
     }
-    df <- data.frame(id, name, acronym,
+    df <- data.frame(id, name, acronym, studyIds,
                      studies, variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
     if (all(is.na(df$name))) {
       df$name <- NULL
