@@ -8,17 +8,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-#' Get the taxonomies
+#' Get the taxonomies, optionally filtered by taxonomy name and by term matching.
 #' 
 #' @title Get the taxonomies
 #' @param mica A Mica object
 #' @param query The search query
-#' @param locale The language for labels (default is NULL, in which case labels are not included in the result)
+#' @param locale The language for labels (when NULL labels are not included in the result)
 #' @param target What the taxonomy is about: variable (default), dataset, study, network
-#' @param taxonomies Taxonomy names to subset. If NULL or empty al taxonomies are returned
+#' @param taxonomies Taxonomy names to subset. If NULL or empty all taxonomies are returned
 #' @param df Return a data.frame (default is TRUE)
 #' @export
-mica.taxonomies <- function(mica, query=NULL, locale=NULL, target="variable", taxonomies=NULL, df=TRUE) {
+mica.taxonomies <- function(mica, query=NULL, locale="en", target="variable", taxonomies=NULL, df=TRUE) {
   res <- .get(mica, "taxonomies", "_search", query=list(query=query, locale=locale, target=target))
   if (!df) {
     return(res)
@@ -63,4 +63,24 @@ mica.taxonomies <- function(mica, query=NULL, locale=NULL, target="variable", ta
   } else {
     data.frame()
   }
+}
+
+#' Get the taxonomy vocabularies, optionally filtered by taxonomy name and by term matching.
+#' 
+#' @title Get the vocabularies
+#' @param mica A Mica object
+#' @param query The search query
+#' @param locale The language for labels (when NULL labels are not included in the result)
+#' @param target What the taxonomy is about: variable (default), dataset, study, network
+#' @param taxonomies Taxonomy names to subset. If NULL or empty all taxonomies are returned
+#' @param df Return a data.frame (default is TRUE)
+#' @export
+mica.vocabularies <- function(mica, query=NULL, locale="en", target="variable", taxonomies=NULL, df=TRUE) {
+  res <- mica.taxonomies(mica, query=query, locale=locale, target=target, taxonomies=taxonomies)
+  if (!is.null(res$taxonomy)) {
+    res$vocabulary <- paste0(res$taxonomy, ".", res$vocabulary)
+    res$taxonomy <- NULL
+    res$taxonomy.title <- NULL
+  }
+  res
 }
