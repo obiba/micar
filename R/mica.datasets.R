@@ -24,7 +24,7 @@ mica.datasets <- function(mica, query="dataset()",
                           select=list("acronym","name","studyTable","harmonizationTable","model"), sort=list("id"), 
                           from=0, limit=10000, locale="en", df=TRUE) {
   q <- .append.rql(query, "dataset", select, sort, from, limit, locale)
-  res <- .get(mica, "datasets", "_rql", query=list(query=q))
+  res <- .post(mica, "datasets", "_rql", query=list(query=q))
   if (!df) {
     return(res)
   }

@@ -44,14 +44,14 @@
 #' @title New RQL node
 #' @param name The name of the operator
 #' @param ... The arguments of the operation
-#' @export
+#' @keywords internal
 rqlNode <- function(name,...) {
   node <- list(name=name,args=list(...))
   class(node) <- "RqlNode"
   node
 }
 
-#' @export
+#' @keywords internal
 toString.RqlNode <- function(x, ...) {
   args <- ""
   if (class(x$args) == "list") {

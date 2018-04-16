@@ -148,11 +148,19 @@ print.mica <- function(x, ...) {
   verbose
 }
 
-#' Issues a request to mica for the specified resource
+#' Issues a GET request to mica for the specified resource
 #' @import httr
 #' @keywords internal
 .get <- function(mica, ..., query=list()) {
   r <- GET(.url(mica, ...), query=query, .verbose())
+  .handleResponse(mica, r)
+}
+
+#' Issues a POST form request to mica for the specified resource
+#' @import httr
+#' @keywords internal
+.post <- function(mica, ..., query=list()) {
+  r <- POST(.url(mica, ...), body=query, encode=c("form"), .verbose())
   .handleResponse(mica, r)
 }
 

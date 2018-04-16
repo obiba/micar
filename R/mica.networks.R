@@ -24,7 +24,7 @@ mica.networks <- function(mica, query="network()",
                           select=list("acronym", "name", "studyIds","model"), sort=list("id"), 
                           from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "network", select, sort, from, limit, locale)
-  res <- .get(mica, "networks", "_rql", query=list(query=q))
+  res <- .post(mica, "networks", "_rql", query=list(query=q))
   if (!df) {
     return(res)
   }

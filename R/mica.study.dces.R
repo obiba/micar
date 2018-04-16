@@ -25,7 +25,7 @@ mica.study.dces <- function(mica, query="study()",
                          sort=list("id"), 
                          from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "study", select, sort, from, limit, locale)
-  res <- .get(mica, "studies", "_rql", query=list(query=q))
+  res <- .post(mica, "studies", "_rql", query=list(query=q))
   if (!df) {
     return(res)
   }

@@ -24,7 +24,7 @@ mica.variables <- function(mica, query="variable()",
                            select=list("attributes","nature","valueType"), sort=list("id"), 
                            from=0, limit=10000, locale="en", df=TRUE) {
   q <- .append.rql(query, "variable", select, sort, from, limit, locale)
-  res <- .get(mica, "variables", "_rql", query=list(query=q))
+  res <- .post(mica, "variables", "_rql", query=list(query=q))
   if (!df) {
     return(res)
   }

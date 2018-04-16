@@ -14,3 +14,4 @@ rqlNode(name, ...)
 \description{
 Creates a new RQL node that represents an operation.
 }
+\keyword{internal}
