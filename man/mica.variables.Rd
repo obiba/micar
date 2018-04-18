@@ -4,9 +4,9 @@
 \alias{mica.variables}
 \title{Get the variables}
 \usage{
-mica.variables(mica, query = "variable()", select = list("attributes",
-  "nature", "valueType"), sort = list("id"), from = 0, limit = 10000,
-  locale = "en", df = TRUE)
+mica.variables(mica, query = "variable()", select = list("*"),
+  sort = list("id"), from = 0, limit = 10000, locale = "en",
+  df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
