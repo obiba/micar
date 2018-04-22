@@ -5,7 +5,7 @@
 \title{Get the studies}
 \usage{
 mica.studies(mica, query = "study()", select = list("acronym", "name",
-  "model", "populations.dataCollectionEvents.model.dataSources"),
+  "objectives", "model", "populations.dataCollectionEvents.model.dataSources"),
   sort = list("id"), from = 0, limit = 100, locale = "en", df = TRUE)
 }
 \arguments{

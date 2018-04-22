@@ -21,7 +21,7 @@
 #' @param df Return a data.frame (default is TRUE)
 #' @export
 mica.networks <- function(mica, query="network()", 
-                          select=list("acronym", "name", "studyIds","model"), sort=list("id"), 
+                          select=list("*"), sort=list("id"), 
                           from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "network", select, sort, from, limit, locale)
   res <- .post(mica, "networks", "_rql", query=list(query=q))
@@ -34,6 +34,7 @@ mica.networks <- function(mica, query="network()",
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
     acronym <- rep(NA, length(summaries))
+    description <- rep(NA, length(summaries))
     studyIds <- rep(NA, length(summaries))
     model <- list()
     studies <- rep(NA, length(summaries))
@@ -48,9 +49,10 @@ mica.networks <- function(mica, query="network()",
         id[i] <- n[["id"]]
         name[i] <- .extractLabel(locale, n[["name"]])
         acronym[i] <- .extractLabel(locale, n[["acronym"]])
+        description[i] <- .extractLabel(locale, n[["description"]])
         studyIds[i] <- paste(n[["studyIds"]], collapse = "|")
         if (!is.null(n[["content"]])) {
-          ct <- .flatten(jsonlite::fromJSON(n[["content"]]))
+          ct <- .flatten(jsonlite::fromJSON(n[["content"]]), locale)
           for (key in names(ct)) {
             if (!(key %in% names(model))) {
               d <- list()
@@ -69,7 +71,7 @@ mica.networks <- function(mica, query="network()",
         dataschemaVariables[i] <- .nullToNA(counts[["dataschemaVariables"]])
       }
     }
-    df <- data.frame(id, name, acronym, studyIds,
+    df <- data.frame(id, name, acronym, description, studyIds,
                      studies, variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
     if (all(is.na(df$name))) {
       df$name <- NULL

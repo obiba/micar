@@ -21,7 +21,7 @@
 #' @param df Return a data.frame (default is TRUE)
 #' @export
 mica.study.populations <- function(mica, query="study()",
-                         select=list("populations.name", "populations.model"), 
+                         select=list("populations.name","populations.description","populations.model"), 
                          sort=list("id"), 
                          from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "study", select, sort, from, limit, locale)
@@ -39,6 +39,7 @@ mica.study.populations <- function(mica, query="study()",
     }
     id <- rep(NA, populationsCount)
     name <- rep(NA, populationsCount)
+    description <- rep(NA, populationsCount)
     studyId <- rep(NA, populationsCount)
     model <- list()
     idx <- 0
@@ -49,9 +50,10 @@ mica.study.populations <- function(mica, query="study()",
           idx <- idx + 1
           id[idx] <- paste0(s[["id"]], ":", pop[["id"]])
           name[idx] <- .extractLabel(locale, pop[["name"]])
+          description[idx] <- .extractLabel(locale, pop[["description"]])
           studyId[[idx]] <- s[["id"]]
           if (!is.null(pop[["content"]])) {
-            ct <- .flatten(jsonlite::fromJSON(pop[["content"]]))
+            ct <- .flatten(jsonlite::fromJSON(pop[["content"]]), locale)
             for (key in names(ct)) {
               if (!(key %in% names(model))) {
                 d <- list()
@@ -64,7 +66,7 @@ mica.study.populations <- function(mica, query="study()",
         }
       }
     }
-    df <- data.frame(id, name, studyId)
+    df <- data.frame(id, name, description, studyId)
     if (all(is.na(df$name))) {
       df$name <- NULL
     }

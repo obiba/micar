@@ -120,16 +120,17 @@ print.mica <- function(x, ...) {
 
 #' Flatten a list hierarchy
 #' @keywords internal
-.flatten <- function(content) {
+.flatten <- function(content, locale="en") {
   rval <- list()
   for (n in names(content)) {
     val <- content[[n]]
     if (!is.list(val)) {
       rval[[n]] <- ifelse(is.null(val), NA, ifelse(length(val)<2 && (is.logical(val) || is.numeric(val)), val, paste(val, collapse = "|")))
     } else {
-      subct <- .flatten(val)
+      subct <- .flatten(val, locale)
       for (subn in names(subct)) {
-        k <- paste0(n, ".", subn)
+        # localized value is attached to the parent node
+        k <- ifelse(subn == locale, n,  paste0(n, ".", subn))
         rval[[k]] <- subct[[subn]]
       }
     }

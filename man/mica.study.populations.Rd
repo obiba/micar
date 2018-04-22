@@ -5,8 +5,9 @@
 \title{Get the study populations}
 \usage{
 mica.study.populations(mica, query = "study()",
-  select = list("populations.name", "populations.model"), sort = list("id"),
-  from = 0, limit = 100, locale = "en", df = TRUE)
+  select = list("populations.name", "populations.description",
+  "populations.model"), sort = list("id"), from = 0, limit = 100,
+  locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}

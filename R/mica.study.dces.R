@@ -43,6 +43,7 @@ mica.study.dces <- function(mica, query="study()",
     }
     id <- rep(NA, dcesCount)
     name <- rep(NA, dcesCount)
+    description <- rep(NA, dcesCount)
     studyId <- rep(NA, dcesCount)
     populationId <- rep(NA, dcesCount)
     start <- rep(NA, dcesCount)
@@ -58,12 +59,13 @@ mica.study.dces <- function(mica, query="study()",
               idx <- idx + 1
               id[idx] <- paste0(s[["id"]], ":", pop[["id"]], ":", dce[["id"]])
               name[idx] <- .extractLabel(locale, dce[["name"]])
+              description[idx] <- .extractLabel(locale, dce[["description"]])
               studyId[[idx]] <- s[["id"]]
               populationId[[idx]] <- paste0(s[["id"]], ":", pop[["id"]])
               start[[idx]] <- .nullToNA(dce[["start"]])
               end[[idx]] <- .nullToNA(dce[["end"]])
               if (!is.null(dce[["content"]])) {
-                ct <- .flatten(jsonlite::fromJSON(dce[["content"]]))
+                ct <- .flatten(jsonlite::fromJSON(dce[["content"]]), locale)
                 for (key in names(ct)) {
                   if (!(key %in% names(model))) {
                     d <- list()
@@ -78,7 +80,7 @@ mica.study.dces <- function(mica, query="study()",
         }
       }
     }
-    df <- data.frame(id, name, studyId, populationId, start, end)
+    df <- data.frame(id, name, description, studyId, populationId, start, end)
     if (all(is.na(df$name))) {
       df$name <- NULL
     }

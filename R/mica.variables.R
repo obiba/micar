@@ -47,6 +47,7 @@ mica.variables <- function(mica, query="variable()",
     repeatable <- rep(NA, length(summaries))
     occurrenceGroup <- rep(NA, length(summaries))
     label <- rep(NA, length(summaries))
+    description <- rep(NA, length(summaries))
     categories <- rep(NA, length(summaries))
     categories.missing <- rep(NA, length(summaries))
     categories.label <- rep(NA, length(summaries))
@@ -68,6 +69,7 @@ mica.variables <- function(mica, query="variable()",
       repeatable[i] <- .nullToNA(v[["repeatable"]])
       occurrenceGroup[i] <- .nullToNA(v[["occurrenceGroup"]])
       label[i] <- .extractLabel(locale, v[["variableLabel"]])
+      description[i] <- .extractLabel(locale, v[["description"]])
       if ("categories" %in% names(v)) {
         categories[i] <- paste(lapply(v$categories, function(cat) { cat$name }), collapse = "|")
         categories.missing[i] <- paste(lapply(v$categories, function(cat) { cat$missing }), collapse = "|")
@@ -93,7 +95,7 @@ mica.variables <- function(mica, query="variable()",
       }
     }
     df <- data.frame(id, name, valueType, nature, categories, categories.missing, categories.label, 
-                     variableType, label, datasetId, studyId, populationId, dceId, 
+                     variableType, label, description, datasetId, studyId, populationId, dceId, 
                      mimeType, unit, referencedEntityType, repeatable, occurrenceGroup)
     for (key in c("label", "categories", "categories.missing", "categories.label", "populationId", "dceId", "valueType", "nature", "mimeType", "unit", "referencedEntityType", "repeatable", "occurrenceGroup")) {
       if (all(is.na(df[key]))) {

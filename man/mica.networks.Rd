@@ -4,9 +4,8 @@
 \alias{mica.networks}
 \title{Get the networks}
 \usage{
-mica.networks(mica, query = "network()", select = list("acronym", "name",
-  "studyIds", "model"), sort = list("id"), from = 0, limit = 100,
-  locale = "en", df = TRUE)
+mica.networks(mica, query = "network()", select = list("*"),
+  sort = list("id"), from = 0, limit = 100, locale = "en", df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}

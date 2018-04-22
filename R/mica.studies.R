@@ -21,7 +21,7 @@
 #' @param df Return a data.frame (default is TRUE)
 #' @export
 mica.studies <- function(mica, query="study()",
-                         select=list("acronym","name","model","populations.dataCollectionEvents.model.dataSources"), 
+                         select=list("acronym","name","objectives","model","populations.dataCollectionEvents.model.dataSources"), 
                          sort=list("id"), 
                          from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "study", select, sort, from, limit, locale)
@@ -35,6 +35,7 @@ mica.studies <- function(mica, query="study()",
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
     acronym <- rep(NA, length(summaries))
+    objectives <- rep(NA, length(summaries))
     design <- rep(NA, length(summaries))
     targetNumber <- rep(NA, length(summaries))
     dataSources <- list()
@@ -49,6 +50,7 @@ mica.studies <- function(mica, query="study()",
       id[i] <- s[["id"]]
       name[i] <- .extractLabel(locale, s[["name"]])
       acronym[i] <- .extractLabel(locale, s[["acronym"]])
+      objectives[i] <- .extractLabel(locale, s[["objectives"]])
       design[i] <- .nullToNA(s[["design"]]) 
       targetNumber[i] <- .nullToNA(s[["targetNumber"]][["number"]])
       if (!is.null(s[["dataSources"]])) {
@@ -63,7 +65,7 @@ mica.studies <- function(mica, query="study()",
         }
       }
       if (!is.null(s[["content"]])) {
-        ct <- .flatten(jsonlite::fromJSON(s[["content"]]))
+        ct <- .flatten(jsonlite::fromJSON(s[["content"]]), locale)
         for (key in names(ct)) {
           if (!(key %in% names(model))) {
             d <- list()
@@ -80,7 +82,7 @@ mica.studies <- function(mica, query="study()",
       harmonizedDatasets[i] <- .nullToNA(counts[["harmonizationDatasets"]])
       dataschemaVariables[i] <- .nullToNA(counts[["dataschemaVariables"]])
     }
-    df <- data.frame(id, name, acronym, 
+    df <- data.frame(id, name, acronym, objectives,
                      variables, collectedDatasets, collectedVariables, harmonizedDatasets, dataschemaVariables)
     if (all(is.na(df$name))) {
       df$name <- NULL

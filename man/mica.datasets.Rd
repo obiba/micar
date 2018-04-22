@@ -4,9 +4,9 @@
 \alias{mica.datasets}
 \title{Get the datasets}
 \usage{
-mica.datasets(mica, query = "dataset()", select = list("acronym", "name",
-  "studyTable", "harmonizationTable", "model"), sort = list("id"), from = 0,
-  limit = 10000, locale = "en", df = TRUE)
+mica.datasets(mica, query = "dataset()", select = list("*"),
+  sort = list("id"), from = 0, limit = 10000, locale = "en",
+  df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}

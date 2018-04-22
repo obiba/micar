@@ -21,7 +21,7 @@
 #' @param df Return a data.frame (default is TRUE)
 #' @export
 mica.datasets <- function(mica, query="dataset()", 
-                          select=list("acronym","name","studyTable","harmonizationTable","model"), sort=list("id"), 
+                          select=list("*"), sort=list("id"), 
                           from=0, limit=10000, locale="en", df=TRUE) {
   q <- .append.rql(query, "dataset", select, sort, from, limit, locale)
   res <- .post(mica, "datasets", "_rql", query=list(query=q))
@@ -34,6 +34,7 @@ mica.datasets <- function(mica, query="dataset()",
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
     acronym <- rep(NA, length(summaries))
+    description <- rep(NA, length(summaries))
     variableType <- rep(NA, length(summaries))
     entityType <- rep(NA, length(summaries))
     studyId <- rep(NA, length(summaries))
@@ -48,6 +49,7 @@ mica.datasets <- function(mica, query="dataset()",
       id[i] <- d[["id"]]
       name[i] <- .extractLabel(locale, d[["name"]])
       acronym[i] <- .extractLabel(locale, d[["acronym"]])
+      description[i] <- .extractLabel(locale, d[["description"]])
       variableType[i] <- d[["variableType"]]
       entityType[i] <- d[["entityType"]]
       if (!is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]]) && !is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]])) {
@@ -61,7 +63,7 @@ mica.datasets <- function(mica, query="dataset()",
         dceId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["dceId"]]
       }
       if (!is.null(d[["content"]])) {
-        ct <- .flatten(jsonlite::fromJSON(d[["content"]]))
+        ct <- .flatten(jsonlite::fromJSON(d[["content"]]), locale)
         for (key in names(ct)) {
           if (!(key %in% names(model))) {
             l <- list()
@@ -75,7 +77,7 @@ mica.datasets <- function(mica, query="dataset()",
       variables[i] <- .nullToNA(counts[["variables"]])
       networks[i] <- .nullToNA(counts[["networks"]])
     }
-    df <- data.frame(id, name, acronym, variableType, entityType, studyId, populationId, dceId, variables, networks)
+    df <- data.frame(id, name, acronym, description, variableType, entityType, studyId, populationId, dceId, variables, networks)
     if (all(is.na(df$name))) {
       df$name <- NULL
     }
