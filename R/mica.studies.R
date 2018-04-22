@@ -94,14 +94,9 @@ mica.studies <- function(mica, query="study()",
       df[[col]] <- dataSources[[col]]
     }
     for (col in names(model)) {
-      df[[col]] <- model[[col]]
-    }
-    # back compatibility
-    if (!("methods.design" %in% names(model)) && !all(is.na(design))) {
-      df[["methods.design"]] <- design
-    }
-    if (!("numberOfParticipants.participant.number" %in% names(model)) && !all(is.na(targetNumber))) {
-      df[["numberOfParticipants.participant.number"]] <- targetNumber
+      if (!all(is.na(model[[col]]))) {
+        df[[col]] <- model[[col]]
+      }
     }
     df
   } else {

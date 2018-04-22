@@ -80,7 +80,9 @@ mica.networks <- function(mica, query="network()",
       df$acronym <- NULL
     }
     for (col in names(model)) {
-      df[[col]] <- model[[col]]
+      if (!all(is.na(model[[col]]))) {
+        df[[col]] <- model[[col]]
+      }
     }
     df
   } else {

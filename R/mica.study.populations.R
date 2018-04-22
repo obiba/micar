@@ -71,7 +71,9 @@ mica.study.populations <- function(mica, query="study()",
       df$name <- NULL
     }
     for (col in names(model)) {
-      df[[col]] <- model[[col]]
+      if (!all(is.na(model[[col]]))) {
+        df[[col]] <- model[[col]]
+      }
     }
     df
   } else {
