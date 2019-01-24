@@ -122,18 +122,40 @@ print.mica <- function(x, ...) {
 #' @keywords internal
 .flatten <- function(content, locale="en") {
   rval <- list()
-  for (n in names(content)) {
-    val <- content[[n]]
-    if (!is.list(val)) {
-      rval[[n]] <- ifelse(is.null(val), NA, ifelse(length(val)<2 && (is.logical(val) || is.numeric(val)), val, paste(val, collapse = "|")))
-    } else {
-      subct <- .flatten(val, locale)
-      for (subn in names(subct)) {
-        # localized value is attached to the parent node
-        k <- ifelse(subn == locale, n,  paste0(n, ".", subn))
-        rval[[k]] <- subct[[subn]]
+  flattenValue <- function(val) {
+    ifelse(is.null(val), NA, ifelse(length(val)<2 && (is.logical(val) || is.numeric(val)), val, paste(val, collapse = "|")))
+  }
+  if (is.null(names(content))) {
+    # a list, but not a named one
+    for (i in 1:length(content)) {
+      val <- content[[i]]
+      if (!is.list(val)) {
+        rval[[i]] <- flattenValue(val)
+      } else {
+        subct <- .flatten(val, locale)
+        for (subn in names(subct)) {
+          if (is.null(rval[[subn]])) {
+            rval[[subn]] <- subct[[subn]]
+          } else {
+            rval[[subn]] <- paste0(rval[[subn]], "|", subct[[subn]])  
+          }
+        }
       }
     }
+  } else {
+    for (n in names(content)) {
+      val <- content[[n]]
+      if (!is.list(val)) {
+        rval[[n]] <- flattenValue(val)
+      } else {
+        subct <- .flatten(val, locale)
+        for (subn in names(subct)) {
+          # localized value is attached to the parent node
+          k <- ifelse(subn == locale, n,  paste0(n, ".", subn))
+          rval[[k]] <- subct[[subn]]
+        }
+      }
+    }  
   }
   rval
 }
