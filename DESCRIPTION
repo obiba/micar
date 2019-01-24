@@ -14,7 +14,7 @@ Description: Client for Mica, the data Web portal for biobanks by OBiBa.
 License: GPL-3 + file LICENSE
 MicaVersion: >= 3.0.0
 URL: http://www.obiba.org
-    https://github.com/obiba/micar
-BugReports: http://jira.obiba.org
-RoxygenNote: 6.0.1
+BugReports: https://github.com/obiba/micar
+RoxygenNote: 6.1.1
 VignetteBuilder: knitr
+Encoding: UTF-8

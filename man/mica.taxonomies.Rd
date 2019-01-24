@@ -4,8 +4,8 @@
 \alias{mica.taxonomies}
 \title{Get the taxonomies}
 \usage{
-mica.taxonomies(mica, query = NULL, locale = "en", target = "variable",
-  taxonomies = NULL, df = TRUE)
+mica.taxonomies(mica, query = NULL, locale = "en",
+  target = "variable", taxonomies = NULL, df = TRUE)
 }
 \arguments{
 \item{mica}{A Mica object}
