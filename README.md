@@ -5,6 +5,7 @@
 R package for accessing Mica2 web services:
 * search any type of documents (variable, dataset, study, population, dce (datacollection event), network)
 * search taxonomy vocabularies and terms
+* get data access requests form configuration and listing for reporting
 
 ## Installation
 
