@@ -1,8 +1,12 @@
 Package: micar
 Version: 1.1.0
 Title: Mica R
-Author: OBiBa <info@obiba.org>
-Maintainer: OBiBa <info@obiba.org>
+Authors@R: 
+    c(person(given = "Yannick",
+             family = "Marcon",
+             role = c("aut", "cre"),
+             email = "yannick.marcon@obiba.org",
+             comment = c(ORCID = "0000-0003-0138-2023")))
 Depends:
     R (>= 3.0.0),
     httr
@@ -11,8 +15,7 @@ Imports:
 Suggests:
     knitr
 Description: Client for Mica, the data Web portal for biobanks by OBiBa.
-License: GPL-3 + file LICENSE
-MicaVersion: >= 3.0.0
+License: GPL-3
 URL: http://www.obiba.org
 BugReports: https://github.com/obiba/micar
 RoxygenNote: 6.1.1

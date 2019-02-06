@@ -1,0 +1,67 @@
+---
+title: "Mica Search API"
+author: "Yannick Marcon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mica Search API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+[Mica](https://www.obiba.org/pages/products/mica/) provides some web services for searching content. The Mica R package exposes search related functions:
+
+* search query can mix network, study, dataset and variable criteria,
+* RQL (Resource Query Language) support for expressing search requests (note that queries can be copied from Search page in the web UI),
+* results are data frames that can be used for subsequent filtering and reporting.
+
+Setup the connection with Mica, login with *anonymous* user and default password (to be changed):
+
+```{r eval=FALSE}
+library(micar)
+m <- mica.login(url="https://mica-demo.obiba.org")
+```
+
+Get the 10 first networks which datasets have variables matching the provided criteria:
+
+```{r eval=FALSE}
+mica.networks(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))", locale="en", from=0, limit=10)
+```
+
+Get the 100 first studies matching the provided study criteria:
+
+```{r eval=FALSE}
+mica.studies(m, query="study(in(Mica_study.methods-design,cohort_study))")
+```
+
+Study populations and data collection events (DCE) can also be queried:
+
+```{r eval=FALSE}
+mica.study.populations(m, query="study(in(Mica_study.methods-design,cohort_study))")
+mica.study.dces(m, query="study(in(Mica_study.methods-design,cohort_study))")
+```
+
+Get some datasets which variables are about Drugs usage:
+
+```{r eval=FALSE}
+mica.datasets(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))")
+```
+
+Get the corresponding variables:
+
+```{r eval=FALSE}
+mica.variables(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))")
+```
+
+The search query expression is based on the declared taxonomies, vocabularies and terms. The following functions allow to query for terms matching some open text criteria, for instance get the vocabulary terms about *cancer* across all the variable taxonomies:
+
+```{r eval=FALSE}
+mica.vocabularies(m, target="variable", query="cancer", locale = "en")
+```
+
+Good practice is to free server resources by sending a logout request:
+
+```{r eval=FALSE}
+mica.logout(m)
+```
+

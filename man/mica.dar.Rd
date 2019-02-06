@@ -14,3 +14,14 @@ mica.dar(mica, id)
 \description{
 Get a specific data access request.
 }
+\seealso{
+Other data access requests functions: \code{\link{mica.dar.actions}},
+  \code{\link{mica.dar.amendment.form}},
+  \code{\link{mica.dar.amendment.history}},
+  \code{\link{mica.dar.amendments.history}},
+  \code{\link{mica.dar.amendments}},
+  \code{\link{mica.dar.amendment}},
+  \code{\link{mica.dar.form}},
+  \code{\link{mica.dar.history}}, \code{\link{mica.dars}}
+}
+\concept{data access requests functions}

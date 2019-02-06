@@ -23,3 +23,7 @@ mica.taxonomies(mica, query = NULL, locale = "en",
 \description{
 Get the taxonomies, optionally filtered by taxonomy name and by term matching.
 }
+\seealso{
+Other taxonomies functions: \code{\link{mica.vocabularies}}
+}
+\concept{taxonomies functions}

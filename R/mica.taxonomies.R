@@ -11,6 +11,7 @@
 #' Get the taxonomies, optionally filtered by taxonomy name and by term matching.
 #' 
 #' @title Get the taxonomies
+#' @family taxonomies functions
 #' @param mica A Mica object
 #' @param query The search query
 #' @param locale The language for labels (when NULL labels are not included in the result)
@@ -68,6 +69,7 @@ mica.taxonomies <- function(mica, query=NULL, locale="en", target="variable", ta
 #' Get the taxonomy vocabularies, optionally filtered by taxonomy name and by term matching.
 #' 
 #' @title Get the vocabularies
+#' @family taxonomies functions
 #' @param mica A Mica object
 #' @param query The search query
 #' @param locale The language for labels (when NULL labels are not included in the result)

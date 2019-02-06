@@ -11,6 +11,7 @@
 #' Get the studies
 #' 
 #' @title Get the studies
+#' @family studies functions
 #' @param mica A Mica object
 #' @param query The search query
 #' @param select The fields to be extracted

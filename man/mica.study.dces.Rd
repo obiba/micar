@@ -28,3 +28,8 @@ mica.study.dces(mica, query = "study()",
 \description{
 Get the study data collection events (DCEs). Note that the DCEs are not fetched directly, they are extracted from study search results.
 }
+\seealso{
+Other studies functions: \code{\link{mica.studies}},
+  \code{\link{mica.study.populations}}
+}
+\concept{studies functions}

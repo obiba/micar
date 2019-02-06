@@ -30,3 +30,8 @@ mica.studies(mica, query = "study()", select = list("acronym", "name",
 \description{
 Get the studies
 }
+\seealso{
+Other studies functions: \code{\link{mica.study.dces}},
+  \code{\link{mica.study.populations}}
+}
+\concept{studies functions}

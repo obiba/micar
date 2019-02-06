@@ -11,6 +11,7 @@
 #' Get the study populations. Note that the populations are not fetched directly, they are extracted from study search results.
 #' 
 #' @title Get the study populations
+#' @family studies functions
 #' @param mica A Mica object
 #' @param query The search query
 #' @param select The fields to be extracted

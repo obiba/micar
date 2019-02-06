@@ -11,6 +11,7 @@
 #' Get the study data collection events (DCEs). Note that the DCEs are not fetched directly, they are extracted from study search results.
 #' 
 #' @title Get the study data collection events
+#' @family studies functions
 #' @param mica A Mica object
 #' @param query The search query
 #' @param select The fields to be extracted

@@ -1,0 +1,59 @@
+---
+title: "Mica Data Access Request API"
+author: "Yannick Marcon"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Mica Data Access Request API}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+[Mica](https://www.obiba.org/pages/products/mica/) provides some web services for handling the data access request (DAR) workflow. The Mica R package exposes data access requests related functions that may be used for reporting:
+
+* as data access requests form is configurable, the form can be downloaded,
+* data access requests can be listed or extracted individually.
+
+Setup the connection with Mica, login with a user having permission to administrate data access requests:
+
+```{r eval=FALSE}
+library(micar)
+m <- mica.login(username="administrator", password="password", url="https://mica-demo.obiba.org")
+```
+
+Get the DAR form that describes the data model:
+
+```{r eval=FALSE}
+mica.dar.form(m)
+```
+
+Get the list of all the data access requests, one column per field:
+
+```{r eval=FALSE}
+mica.dars(m)
+```
+
+Or only a single one:
+
+```{r eval=FALSE}
+mica.dar(m, "390463")
+```
+
+Get the history of changes of a DAR:
+
+```{r eval=FALSE}
+mica.dar.history(m, "390463")
+```
+
+Get the amendments of a DAR:
+
+```{r eval=FALSE}
+mica.dar.amendments(m, "390463")
+```
+
+Good practice is to free server resources by sending a logout request:
+
+```{r eval=FALSE}
+mica.logout(m)
+```
+

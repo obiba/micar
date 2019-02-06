@@ -29,3 +29,8 @@ mica.study.populations(mica, query = "study()",
 \description{
 Get the study populations. Note that the populations are not fetched directly, they are extracted from study search results.
 }
+\seealso{
+Other studies functions: \code{\link{mica.studies}},
+  \code{\link{mica.study.dces}}
+}
+\concept{studies functions}
