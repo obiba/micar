@@ -16,6 +16,13 @@ mica.dar.amendments.history(mica, pid, df = TRUE)
 \description{
 Get the history of the amendments of a specific data access request.
 }
+\examples{
+\dontrun{
+m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+mica.dar.amendments.history(m, "12345")
+mica.logout(m)
+}
+}
 \seealso{
 Other data access requests functions: \code{\link{mica.dar.actions}},
   \code{\link{mica.dar.amendment.form}},

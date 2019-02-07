@@ -23,6 +23,13 @@ mica.vocabularies(mica, query = NULL, locale = "en",
 \description{
 Get the taxonomy vocabularies, optionally filtered by taxonomy name and by term matching.
 }
+\examples{
+\dontrun{
+m <- mica.login("https://mica-demo.obiba.org")
+mica.vocabularies(m,target="variable", query="cancer", locale = "en")
+mica.logout(m)
+}
+}
 \seealso{
 Other taxonomies functions: \code{\link{mica.taxonomies}}
 }

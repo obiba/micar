@@ -20,6 +20,13 @@
 #' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' mica.studies(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))", 
+#'   locale="en", from=0, limit=10)
+#' mica.logout(m)
+#' }
 #' @export
 mica.studies <- function(mica, query="study()",
                          select=list("acronym","name","objectives","model","populations.dataCollectionEvents.model.dataSources"), 

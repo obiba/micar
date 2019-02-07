@@ -19,6 +19,12 @@
 #' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' mica.networks(m, query="network(in(Mica_network.studyIds,clsa))")
+#' mica.logout(m)
+#' }
 #' @export
 mica.networks <- function(mica, query="network()", 
                           select=list("*"), sort=list("id"), 

@@ -17,6 +17,13 @@
 #' @param password User password in mica. Can be provided by "mica.password" option.
 #' @param url Mica url or list of mica urls. Can be provided by "mica.url" option.
 #' @param opts Curl options. Can be provided by "mica.opts" option.
+#' @examples 
+#' \dontrun{
+#' # login using credentials from mica.username and mica.password options
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' # login by providing credentials
+#' m <- mica.login("administrator", "password", "https://mica-demo.obiba.org")
+#' }
 #' @export
 mica.login <- function(username=getOption("mica.username", "anonymous"), password=getOption("mica.password", "password"), url=getOption("mica.url"), opts=getOption("mica.opts", list())) {
   if (is.null(url)) stop("mica url is required", call.=FALSE)
@@ -43,6 +50,11 @@ mica.login <- function(username=getOption("mica.username", "anonymous"), passwor
 #' 
 #' @title Close connection with Mica
 #' @param mica A Mica object
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' mica.logout(m)
+#' }
 #' @export
 mica.logout <- function(mica) {
   if (getOption("verbose", FALSE)) {

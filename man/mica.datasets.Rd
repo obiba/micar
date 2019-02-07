@@ -28,3 +28,10 @@ mica.datasets(mica, query = "dataset()", select = list("*"),
 \description{
 Get the datasets
 }
+\examples{
+\dontrun{
+m <- mica.login("https://mica-demo.obiba.org")
+mica.datasets(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))")
+mica.logout(m)
+}
+}

@@ -28,3 +28,10 @@ mica.variables(mica, query = "variable()", select = list("*"),
 \description{
 Get the variables
 }
+\examples{
+\dontrun{
+m <- mica.login("https://mica-demo.obiba.org")
+mica.variables(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))")
+mica.logout(m)
+}
+}
