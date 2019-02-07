@@ -18,6 +18,13 @@
 #' @param target What the taxonomy is about: variable (default), dataset, study, network
 #' @param taxonomies Taxonomy names to subset. If NULL or empty all taxonomies are returned
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' mica.taxonomies(m, target="variable", query="sex", locale="en",
+#'   taxonomies = list("Mlstr_area", "Mlstr_additional"))
+#' mica.logout(m)
+#' }
 #' @export
 mica.taxonomies <- function(mica, query=NULL, locale="en", target="variable", taxonomies=NULL, df=TRUE) {
   res <- .get(mica, "taxonomies", "_search", query=list(query=query, locale=locale, target=target))
@@ -76,6 +83,12 @@ mica.taxonomies <- function(mica, query=NULL, locale="en", target="variable", ta
 #' @param target What the taxonomy is about: variable (default), dataset, study, network
 #' @param taxonomies Taxonomy names to subset. If NULL or empty all taxonomies are returned
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' mica.vocabularies(m,target="variable", query="cancer", locale = "en")
+#' mica.logout(m)
+#' }
 #' @export
 mica.vocabularies <- function(mica, query=NULL, locale="en", target="variable", taxonomies=NULL, df=TRUE) {
   res <- mica.taxonomies(mica, query=query, locale=locale, target=target, taxonomies=taxonomies)

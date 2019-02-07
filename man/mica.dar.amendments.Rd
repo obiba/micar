@@ -18,6 +18,13 @@ mica.dar.amendments(mica, pid, status = NULL, df = TRUE)
 \description{
 Get the list of amendments of a specific data access request.
 }
+\examples{
+\dontrun{
+m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+mica.dar.amendments(m, "12345")
+mica.logout(m)
+}
+}
 \seealso{
 Other data access requests functions: \code{\link{mica.dar.actions}},
   \code{\link{mica.dar.amendment.form}},

@@ -13,6 +13,12 @@
 #' @title Get the data access request form
 #' @family data access requests functions
 #' @param mica A Mica object
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.form(m)
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.form <- function(mica) {
   res <- .get(mica, "config", "data-access-form")
@@ -35,6 +41,12 @@ mica.dar.form <- function(mica) {
 #' @param mica A Mica object
 #' @param status Filter by status
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dars(m)
+#' mica.logout(m)
+#' }
 #' @export
 mica.dars <- function(mica, status=NULL, df=TRUE) {
   query <- list()
@@ -59,6 +71,12 @@ mica.dars <- function(mica, status=NULL, df=TRUE) {
 #' @family data access requests functions
 #' @param mica A Mica object
 #' @param id Data access request identifier
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar(m, "12345")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar <- function(mica, id) {
   res <- .get(mica, "data-access-request", id)
@@ -75,6 +93,12 @@ mica.dar <- function(mica, id) {
 #' @param mica A Mica object
 #' @param id Data access request identifier
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.history(m, "12345")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.history <- function(mica, id, df=TRUE) {
   res <- .get(mica, "data-access-request", id)
@@ -96,6 +120,12 @@ mica.dar.history <- function(mica, id, df=TRUE) {
 #' @param mica A Mica object
 #' @param id Data access request identifier
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.actions(m, "12345")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.actions <- function(mica, id, df=TRUE) {
   res <- .get(mica, "data-access-request", id)
@@ -131,6 +161,12 @@ mica.dar.actions <- function(mica, id, df=TRUE) {
 #' @title Get the data access request amendment form
 #' @family data access requests functions
 #' @param mica A Mica object
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.amendment.form(m)
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.amendment.form <- function(mica) {
   res <- .get(mica, "config", "data-access-amendment-form")
@@ -154,6 +190,12 @@ mica.dar.amendment.form <- function(mica) {
 #' @param pid Data access request identifier
 #' @param status Filter by status
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.amendments(m, "12345")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.amendments <- function(mica, pid, status=NULL, df=TRUE) {
   query <- list()
@@ -179,6 +221,12 @@ mica.dar.amendments <- function(mica, pid, status=NULL, df=TRUE) {
 #' @param mica A Mica object
 #' @param pid Data access request identifier
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.amendments.history(m, "12345")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.amendments.history <- function(mica, pid, df=TRUE) {
   res <- .get(mica, "data-access-request", pid, "amendments", "_history")
@@ -200,6 +248,12 @@ mica.dar.amendments.history <- function(mica, pid, df=TRUE) {
 #' @param mica A Mica object
 #' @param pid Data access request identifier
 #' @param id Amendment identifier
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.amendment(m, "12345", "12345-1")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.amendment <- function(mica, pid, id) {
   res <- .get(mica, "data-access-request", pid, "amendment", id)
@@ -217,6 +271,12 @@ mica.dar.amendment <- function(mica, pid, id) {
 #' @param pid Data access request identifier
 #' @param id Amendment identifier
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.amendment.history(m, "12345", "12345-1")
+#' mica.logout(m)
+#' }
 #' @export
 mica.dar.amendment.history <- function(mica, pid, id, df=TRUE) {
   res <- .get(mica, "data-access-request", pid, "amendment", id)
@@ -230,7 +290,6 @@ mica.dar.amendment.history <- function(mica, pid, id, df=TRUE) {
     data.frame()
   }
 }
-
 
 #' Make a list of DataAccessRequest DTOs a data frame (applies to DARs and their amendments)
 #' @keywords internal

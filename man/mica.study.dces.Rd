@@ -28,6 +28,13 @@ mica.study.dces(mica, query = "study()",
 \description{
 Get the study data collection events (DCEs). Note that the DCEs are not fetched directly, they are extracted from study search results.
 }
+\examples{
+\dontrun{
+m <- mica.login("https://mica-demo.obiba.org")
+mica.study.dces(m, query="study(in(Mica_study.methods-design,cohort_study))")
+mica.logout(m)
+}
+}
 \seealso{
 Other studies functions: \code{\link{mica.studies}},
   \code{\link{mica.study.populations}}

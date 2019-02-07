@@ -23,3 +23,11 @@ A Mica object.
 \description{
 Open a connection with Mica and returns a Mica object.
 }
+\examples{
+\dontrun{
+# login using credentials from mica.username and mica.password options
+m <- mica.login("https://mica-demo.obiba.org")
+# login by providing credentials
+m <- mica.login("administrator", "password", "https://mica-demo.obiba.org")
+}
+}

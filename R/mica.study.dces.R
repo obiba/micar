@@ -20,6 +20,12 @@
 #' @param limit Max number of items. Note that this limit applies to the studies that are fetched, the resulting count of DCEs will be higher.
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("https://mica-demo.obiba.org")
+#' mica.study.dces(m, query="study(in(Mica_study.methods-design,cohort_study))")
+#' mica.logout(m)
+#' }
 #' @export
 mica.study.dces <- function(mica, query="study()",
                          select=list("populations.dataCollectionEvents"), 

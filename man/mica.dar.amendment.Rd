@@ -16,6 +16,13 @@ mica.dar.amendment(mica, pid, id)
 \description{
 Get a specific data access request amendment.
 }
+\examples{
+\dontrun{
+m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+mica.dar.amendment(m, "12345", "12345-1")
+mica.logout(m)
+}
+}
 \seealso{
 Other data access requests functions: \code{\link{mica.dar.actions}},
   \code{\link{mica.dar.amendment.form}},

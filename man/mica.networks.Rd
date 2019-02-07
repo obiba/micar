@@ -28,3 +28,10 @@ mica.networks(mica, query = "network()", select = list("*"),
 \description{
 Get the networks
 }
+\examples{
+\dontrun{
+m <- mica.login("https://mica-demo.obiba.org")
+mica.networks(m, query="network(in(Mica_network.studyIds,clsa))")
+mica.logout(m)
+}
+}

@@ -12,3 +12,9 @@ mica.logout(mica)
 \description{
 Close connection and release resources of Mica.
 }
+\examples{
+\dontrun{
+m <- mica.login("https://mica-demo.obiba.org")
+mica.logout(m)
+}
+}
