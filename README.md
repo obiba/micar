@@ -1,6 +1,7 @@
 # Mica R
 
 [![Build Status](https://travis-ci.com/obiba/micar.svg?branch=master)](https://travis-ci.com/obiba/micar)
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/micar)](https://cran.r-project.org/package=micar)
 
 R package for accessing Mica2 web services:
 * search any type of documents (variable, dataset, study, population, dce (datacollection event), network)
