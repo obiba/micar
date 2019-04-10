@@ -72,7 +72,7 @@ mica.study.dces <- function(mica, query="study()",
               start[[idx]] <- .nullToNA(dce[["start"]])
               end[[idx]] <- .nullToNA(dce[["end"]])
               if (!is.null(dce[["content"]])) {
-                ct <- .flatten(jsonlite::fromJSON(dce[["content"]]), locale)
+                ct <- .flatten(jsonlite::fromJSON(dce[["content"]], simplifyDataFrame = FALSE), locale)
                 for (key in names(ct)) {
                   if (!(key %in% names(model))) {
                     d <- list()

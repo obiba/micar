@@ -58,7 +58,7 @@ mica.networks <- function(mica, query="network()",
         description[i] <- .extractLabel(locale, n[["description"]])
         studyIds[i] <- paste(n[["studyIds"]], collapse = "|")
         if (!is.null(n[["content"]])) {
-          ct <- .flatten(jsonlite::fromJSON(n[["content"]]), locale)
+          ct <- .flatten(jsonlite::fromJSON(n[["content"]], simplifyDataFrame = FALSE), locale)
           for (key in names(ct)) {
             if (!(key %in% names(model))) {
               d <- list()

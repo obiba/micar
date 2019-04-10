@@ -73,7 +73,7 @@ mica.studies <- function(mica, query="study()",
         }
       }
       if (!is.null(s[["content"]])) {
-        ct <- .flatten(jsonlite::fromJSON(s[["content"]]), locale)
+        ct <- .flatten(jsonlite::fromJSON(s[["content"]], simplifyDataFrame = FALSE), locale)
         for (key in names(ct)) {
           if (!(key %in% names(model))) {
             d <- list()

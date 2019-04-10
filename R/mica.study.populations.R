@@ -60,7 +60,7 @@ mica.study.populations <- function(mica, query="study()",
           description[idx] <- .extractLabel(locale, pop[["description"]])
           studyId[[idx]] <- s[["id"]]
           if (!is.null(pop[["content"]])) {
-            ct <- .flatten(jsonlite::fromJSON(pop[["content"]]), locale)
+            ct <- .flatten(jsonlite::fromJSON(pop[["content"]], simplifyDataFrame = FALSE), locale)
             for (key in names(ct)) {
               if (!(key %in% names(model))) {
                 d <- list()
