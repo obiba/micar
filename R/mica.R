@@ -159,6 +159,8 @@ print.mica <- function(x, ...) {
       val <- content[[n]]
       if (!is.list(val)) {
         rval[[n]] <- flattenValue(val)
+      } else if (length(val) == 0) {
+        rval[[n]] <- NA
       } else {
         subct <- .flatten(val, locale)
         for (subn in names(subct)) {
