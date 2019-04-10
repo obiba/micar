@@ -69,7 +69,7 @@ mica.datasets <- function(mica, query="dataset()",
         dceId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["dceId"]]
       }
       if (!is.null(d[["content"]])) {
-        ct <- .flatten(jsonlite::fromJSON(d[["content"]]), locale)
+        ct <- .flatten(jsonlite::fromJSON(d[["content"]], simplifyDataFrame = FALSE), locale)
         for (key in names(ct)) {
           if (!(key %in% names(model))) {
             l <- list()
