@@ -4,9 +4,12 @@
 \alias{mica.login}
 \title{Open connection with Mica}
 \usage{
-mica.login(username = getOption("mica.username", "anonymous"),
+mica.login(
+  username = getOption("mica.username", "anonymous"),
   password = getOption("mica.password", "password"),
-  url = getOption("mica.url"), opts = getOption("mica.opts", list()))
+  url = getOption("mica.url"),
+  opts = getOption("mica.opts", list())
+)
 }
 \arguments{
 \item{username}{User name in mica. Can be provided by "mica.username" option.}

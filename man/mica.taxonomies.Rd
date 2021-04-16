@@ -4,8 +4,14 @@
 \alias{mica.taxonomies}
 \title{Get the taxonomies}
 \usage{
-mica.taxonomies(mica, query = NULL, locale = "en",
-  target = "variable", taxonomies = NULL, df = TRUE)
+mica.taxonomies(
+  mica,
+  query = NULL,
+  locale = "en",
+  target = "variable",
+  taxonomies = NULL,
+  df = TRUE
+)
 }
 \arguments{
 \item{mica}{A Mica object}
@@ -32,6 +38,7 @@ mica.logout(m)
 }
 }
 \seealso{
-Other taxonomies functions: \code{\link{mica.vocabularies}}
+Other taxonomies functions: 
+\code{\link{mica.vocabularies}()}
 }
 \concept{taxonomies functions}

@@ -4,11 +4,17 @@
 \alias{mica.studies}
 \title{Get the studies}
 \usage{
-mica.studies(mica, query = "study()", select = list("acronym", "name",
-  "objectives", "model",
-  "populations.dataCollectionEvents.model.dataSources"),
-  sort = list("id"), from = 0, limit = 100, locale = "en",
-  df = TRUE)
+mica.studies(
+  mica,
+  query = "study()",
+  select = list("acronym", "name", "objectives", "model",
+    "populations.dataCollectionEvents.model.dataSources"),
+  sort = list("id"),
+  from = 0,
+  limit = 100,
+  locale = "en",
+  df = TRUE
+)
 }
 \arguments{
 \item{mica}{A Mica object}
@@ -39,7 +45,8 @@ mica.logout(m)
 }
 }
 \seealso{
-Other studies functions: \code{\link{mica.study.dces}},
-  \code{\link{mica.study.populations}}
+Other studies functions: 
+\code{\link{mica.study.dces}()},
+\code{\link{mica.study.populations}()}
 }
 \concept{studies functions}
