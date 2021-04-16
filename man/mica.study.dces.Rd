@@ -4,9 +4,16 @@
 \alias{mica.study.dces}
 \title{Get the study data collection events}
 \usage{
-mica.study.dces(mica, query = "study()",
-  select = list("populations.dataCollectionEvents"), sort = list("id"),
-  from = 0, limit = 100, locale = "en", df = TRUE)
+mica.study.dces(
+  mica,
+  query = "study()",
+  select = list("populations.dataCollectionEvents"),
+  sort = list("id"),
+  from = 0,
+  limit = 100,
+  locale = "en",
+  df = TRUE
+)
 }
 \arguments{
 \item{mica}{A Mica object}
@@ -36,7 +43,8 @@ mica.logout(m)
 }
 }
 \seealso{
-Other studies functions: \code{\link{mica.studies}},
-  \code{\link{mica.study.populations}}
+Other studies functions: 
+\code{\link{mica.studies}()},
+\code{\link{mica.study.populations}()}
 }
 \concept{studies functions}
