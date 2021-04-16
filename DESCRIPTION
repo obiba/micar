@@ -1,5 +1,5 @@
 Package: micar
-Version: 1.1.2
+Version: 1.1.3
 Title: 'Mica' Data Web Portal Client
 Authors@R: 
     c(person(given = "Yannick",
