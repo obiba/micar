@@ -27,20 +27,31 @@
 #' @export
 mica.login <- function(username=getOption("mica.username", "anonymous"), password=getOption("mica.password", "password"), url=getOption("mica.url"), opts=getOption("mica.opts", list())) {
   if (is.null(url)) stop("mica url is required", call.=FALSE)
+  urlObj <- httr::parse_url(url)
   mica <- new.env(parent=globalenv())
   # Username
   mica$username <- username
   # Strip trailing slash
   mica$url <- sub("/$", "", url)
   # Domain name
-  mica$name <- gsub("[:/].*", "", gsub("http[s]*://", "", mica$url))
+  mica$name <- urlObj$hostname
   # Version default value
   mica$version <- NA
   # Authorization
   mica$authorization <- .authToken(username, password)
   class(mica) <- "mica"
   
-  r <- GET(.url(mica, "config"), httr::add_headers(Authorization = mica$authorization), .verbose())
+  if (urlObj$scheme == "http") {
+    stop("'https' url is expected")
+  }
+  options <- opts
+  if (urlObj$hostname == "localhost" && length(options) == 0) {
+    options <- list(ssl_verifyhost=F, ssl_verifypeer=F)
+  }
+  
+  mica$httrConfig <- config()
+  mica$httrConfig$options <- options
+  r <- GET(.url(mica, "config"), config = mica$httrConfig, httr::add_headers(Authorization = mica$authorization), .verbose())
   mica$config <- .handleResponse(mica, r)
   
   mica
@@ -58,9 +69,9 @@ mica.login <- function(username=getOption("mica.username", "anonymous"), passwor
 #' @export
 mica.logout <- function(mica) {
   if (getOption("verbose", FALSE)) {
-    r <- DELETE(.url(mica, "auth", "session", "_current"), httr::verbose())
+    r <- DELETE(.url(mica, "auth", "session", "_current"), config = mica$httrConfig, httr::verbose())
   } else {
-    r <- DELETE(.url(mica, "auth", "session", "_current"))
+    r <- DELETE(.url(mica, "auth", "session", "_current"), config = mica$httrConfig)
   }
   mica$sid <- NULL
 }
@@ -189,7 +200,7 @@ print.mica <- function(x, ...) {
 #' @import httr
 #' @keywords internal
 .get <- function(mica, ..., query=list()) {
-  r <- GET(.url(mica, ...), query=query, .verbose())
+  r <- GET(.url(mica, ...), config = mica$httrConfig, query=query, .verbose())
   .handleResponse(mica, r)
 }
 
@@ -197,7 +208,7 @@ print.mica <- function(x, ...) {
 #' @import httr
 #' @keywords internal
 .post <- function(mica, ..., query=list()) {
-  r <- POST(.url(mica, ...), body=query, encode=c("form"), .verbose())
+  r <- POST(.url(mica, ...), config = mica$httrConfig, body=query, encode=c("form"), .verbose())
   .handleResponse(mica, r)
 }
 
