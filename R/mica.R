@@ -15,7 +15,7 @@
 #' @return A Mica object.
 #' @param username User name in mica. Can be provided by "mica.username" option.
 #' @param password User password in mica. Can be provided by "mica.password" option.
-#' @param url Mica url or list of mica urls. Can be provided by "mica.url" option.
+#' @param url Mica url or list of mica urls. Can be provided by "mica.url" option. Secure http (https) connection is required.
 #' @param opts Curl options. Can be provided by "mica.opts" option.
 #' @examples 
 #' \dontrun{
@@ -27,12 +27,20 @@
 #' @export
 mica.login <- function(username=getOption("mica.username", "anonymous"), password=getOption("mica.password", "password"), url=getOption("mica.url"), opts=getOption("mica.opts", list())) {
   if (is.null(url)) stop("mica url is required", call.=FALSE)
-  urlObj <- httr::parse_url(url)
+  micaUrl <- url
+  if (startsWith(url, "http://localhost:8082")) {
+    micaUrl <- gsub("http://localhost:8082", "https://localhost:8445", url)
+    warning("Deprecation: connecting through secure http is required. Replacing http://localhost:8082 by https://localhost:8445.")
+  } else if (startsWith(url, "http://")) {
+    stop("Deprecation: connecting through secure http is required.")
+  }
+  urlObj <- httr::parse_url(micaUrl)
+  
   mica <- new.env(parent=globalenv())
   # Username
   mica$username <- username
   # Strip trailing slash
-  mica$url <- sub("/$", "", url)
+  mica$url <- sub("/$", "", micaUrl)
   # Domain name
   mica$name <- urlObj$hostname
   # Version default value
@@ -41,9 +49,6 @@ mica.login <- function(username=getOption("mica.username", "anonymous"), passwor
   mica$authorization <- .authToken(username, password)
   class(mica) <- "mica"
   
-  if (urlObj$scheme == "http") {
-    stop("'https' url is expected")
-  }
   options <- opts
   if (urlObj$hostname == "localhost" && length(options) == 0) {
     options <- list(ssl_verifyhost=F, ssl_verifypeer=F)

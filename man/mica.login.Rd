@@ -16,7 +16,7 @@ mica.login(
 
 \item{password}{User password in mica. Can be provided by "mica.password" option.}
 
-\item{url}{Mica url or list of mica urls. Can be provided by "mica.url" option.}
+\item{url}{Mica url or list of mica urls. Can be provided by "mica.url" option. Secure http (https) connection is required.}
 
 \item{opts}{Curl options. Can be provided by "mica.opts" option.}
 }
