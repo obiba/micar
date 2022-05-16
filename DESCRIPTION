@@ -28,6 +28,6 @@ Description: 'Mica' is a server application used to create data web portals for
 License: GPL-3
 URL: https://www.obiba.org/ https://www.obiba.org/pages/products/mica/ https://doi.org/10.1093/ije/dyx180
 BugReports: https://github.com/obiba/micar
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Encoding: UTF-8

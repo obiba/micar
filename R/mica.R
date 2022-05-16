@@ -8,7 +8,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
-#' Open a connection with Mica and returns a Mica object.
+#' Open a connection with Mica and returns a Mica object. When the two-factor
+#' authentication mechanism is enabled, the user will be prompt for one-time password input. 
 #' 
 #' @title Open connection with Mica
 #' 
@@ -57,6 +58,15 @@ mica.login <- function(username=getOption("mica.username", "anonymous"), passwor
   mica$httrConfig <- config()
   mica$httrConfig$options <- options
   r <- GET(.url(mica, "config"), config = mica$httrConfig, httr::add_headers(Authorization = mica$authorization), .verbose())
+  if (httr::status_code(r) == 401) {
+    headers <- httr::headers(r)
+    optHeader <- headers[tolower('WWW-Authenticate')]
+    if (optHeader == 'X-Obiba-TOTP') {
+      # TOTP code is required
+      code <- readline(prompt = 'Enter 6-digits code: ')
+      r <- GET(.url(mica, "config"), config = mica$httrConfig, httr::add_headers(Authorization = mica$authorization, 'X-Obiba-TOTP' = code), .verbose())
+    }
+  }
   mica$config <- .handleResponse(mica, r)
   
   mica

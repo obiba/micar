@@ -24,7 +24,8 @@ mica.login(
 A Mica object.
 }
 \description{
-Open a connection with Mica and returns a Mica object.
+Open a connection with Mica and returns a Mica object. When the two-factor
+authentication mechanism is enabled, the user will be prompt for one-time password input.
 }
 \examples{
 \dontrun{

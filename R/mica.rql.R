@@ -54,7 +54,7 @@ rqlNode <- function(name,...) {
 #' @keywords internal
 toString.RqlNode <- function(x, ...) {
   args <- ""
-  if (class(x$args) == "list") {
+  if (inherits(x$args, "list")) {
     for (item in x$args) {
       if (args == "") {
         args <- toString(item)
@@ -62,7 +62,7 @@ toString.RqlNode <- function(x, ...) {
         args <- paste(args, toString(item), sep=",")  
       }
     }
-  } else if (class(x$args) == "RqlNode") {
+  } else if (inherits(x$args, "RqlNode")) {
     args <- toString(x$args)
   }
   paste0(x$name,"(",toString(args),")", sep = "")
