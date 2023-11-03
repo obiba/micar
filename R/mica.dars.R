@@ -34,9 +34,9 @@ mica.dar.form <- function(mica) {
   res
 }
 
-#' Get the data access requests.
+#' Get the data access requests main form.
 #' 
-#' @title Get the data access requests
+#' @title Get the data access requests main form
 #' @family data access requests functions
 #' @param mica A Mica object
 #' @param status Filter by status
@@ -65,7 +65,42 @@ mica.dars <- function(mica, status=NULL, df=TRUE) {
   }
 }
 
-#' Get a specific data access request.
+#' Get the data access requests preliminary form.
+#' 
+#' @title Get the data access requests preliminary form
+#' @family data access requests functions
+#' @param mica A Mica object
+#' @param status Filter by status
+#' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.preliminaries(m)
+#' mica.logout(m)
+#' }
+#' @export
+mica.dar.preliminaries <- function(mica, status=NULL, df=TRUE) {
+  query <- list()
+  if (!is.null(status)) {
+    query <- list(status=status)
+  }
+  dars <- .get(mica, "data-access-requests", query=query)
+  # for each dar, get the corresponding preliminary
+  res <- lapply(dars, function(dar) {
+    .get(mica, "data-access-request", dar$id, "preliminary", dar$id)
+  })
+  if (!df) {
+    return(res)
+  }
+  n <- length(res)
+  if (n > 0) {
+    .darDTOToDF(res)
+  } else {
+    data.frame()
+  }
+}
+
+#' Get a specific data access request main form.
 #' 
 #' @title Get a data access request
 #' @family data access requests functions
@@ -86,7 +121,7 @@ mica.dar <- function(mica, id) {
   res
 }
 
-#' Get the history of a specific data access request.
+#' Get the history of a specific data access request main form.
 #' 
 #' @title Get data access request history
 #' @family data access requests functions
@@ -108,6 +143,82 @@ mica.dar.history <- function(mica, id, df=TRUE) {
   n <- length(res$statusChangeHistory)
   if (n > 0) {
     .darStatusDTOToDF(id, res$statusChangeHistory)
+  } else {
+    data.frame()
+  }
+}
+
+#' Get a specific data access request preliminary form.
+#' 
+#' @title Get a data access request preliminary form
+#' @family data access requests functions
+#' @param mica A Mica object
+#' @param id Data access request identifier
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.preliminary(m, "12345")
+#' mica.logout(m)
+#' }
+#' @export
+mica.dar.preliminary <- function(mica, id) {
+  res <- .get(mica, "data-access-request", id, "preliminary", id)
+  if (!is.null(res$content)) {
+    res$content <- jsonlite::fromJSON(res$content, simplifyDataFrame=FALSE)
+  }
+  res
+}
+
+#' Get the history of a specific data access request preliminary form.
+#' 
+#' @title Get data access request history preliminary form
+#' @family data access requests functions
+#' @param mica A Mica object
+#' @param id Data access request identifier
+#' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.preliminary.history(m, "12345")
+#' mica.logout(m)
+#' }
+#' @export
+mica.dar.preliminary.history <- function(mica, id, df=TRUE) {
+  res <- .get(mica, "data-access-request", id, "preliminary", id)
+  if (!df) {
+    return(res$statusChangeHistory)
+  }
+  n <- length(res$statusChangeHistory)
+  if (n > 0) {
+    .darStatusDTOToDF(id, res$statusChangeHistory)
+  } else {
+    data.frame()
+  }
+}
+
+
+#' Get a data access requests agreement forms.
+#' 
+#' @title Get a data access requests agreement forms
+#' @family data access requests functions
+#' @param mica A Mica object
+#' @param id Data access request identifier
+#' @param df Return a data.frame (default is TRUE)
+#' @examples 
+#' \dontrun{
+#' m <- mica.login("someuser", "somepassword", "https://mica-demo.obiba.org")
+#' mica.dar.agreements(m, '1234')
+#' mica.logout(m)
+#' }
+#' @export
+mica.dar.agreements <- function(mica, id, df=TRUE) {
+  res <- .get(mica, "data-access-request", id, "agreements")
+  if (!df) {
+    return(res)
+  }
+  n <- length(res)
+  if (n > 0) {
+    .darDTOToDF(res)
   } else {
     data.frame()
   }

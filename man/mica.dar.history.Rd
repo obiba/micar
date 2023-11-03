@@ -14,7 +14,7 @@ mica.dar.history(mica, id, df = TRUE)
 \item{df}{Return a data.frame (default is TRUE)}
 }
 \description{
-Get the history of a specific data access request.
+Get the history of a specific data access request main form.
 }
 \examples{
 \dontrun{
@@ -26,12 +26,16 @@ mica.logout(m)
 \seealso{
 Other data access requests functions: 
 \code{\link{mica.dar.actions}()},
+\code{\link{mica.dar.agreements}()},
 \code{\link{mica.dar.amendment.form}()},
 \code{\link{mica.dar.amendment.history}()},
 \code{\link{mica.dar.amendments.history}()},
 \code{\link{mica.dar.amendments}()},
 \code{\link{mica.dar.amendment}()},
 \code{\link{mica.dar.form}()},
+\code{\link{mica.dar.preliminaries}()},
+\code{\link{mica.dar.preliminary.history}()},
+\code{\link{mica.dar.preliminary}()},
 \code{\link{mica.dars}()},
 \code{\link{mica.dar}()}
 }
