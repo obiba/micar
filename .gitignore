@@ -1,6 +1,7 @@
 # History files
 .Rhistory
 .Rapp.history
+.history
 
 # Session Data files
 .RData
@@ -33,3 +34,5 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Rproj.user
+
+.vscode
