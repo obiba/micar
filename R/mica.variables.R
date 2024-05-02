@@ -1,15 +1,15 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2019 OBiBa. All rights reserved.
-#  
+#
 # This program and the accompanying materials
 # are made available under the terms of the GNU Public License v3.0.
-#  
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
 #' Get the variables
-#' 
+#'
 #' @title Get the variables
 #' @param mica A Mica object
 #' @param query The search query
@@ -19,16 +19,16 @@
 #' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
-#' @examples 
+#' @examples
 #' \dontrun{
 #' m <- mica.login("https://mica-demo.obiba.org")
 #' mica.variables(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))")
 #' mica.logout(m)
 #' }
 #' @export
-mica.variables <- function(mica, query="variable()",  
-                           select=list("*"), 
-                           sort=list("id"), 
+mica.variables <- function(mica, query="variable()",
+                           select=list("*"),
+                           sort=list("id"),
                            from=0, limit=10000, locale="en", df=TRUE) {
   q <- .append.rql(query, "variable", select, sort, from, limit, locale)
   res <- .post(mica, "variables", "_rql", query=list(query=q))
@@ -36,7 +36,7 @@ mica.variables <- function(mica, query="variable()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["variableResultDto"]][["obiba.mica.DatasetVariableResultDto.result"]][["summaries"]]
+  summaries <- res[["variableResultDto"]][["variableResult"]][["summaries"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
@@ -79,7 +79,7 @@ mica.variables <- function(mica, query="variable()",
       if ("categories" %in% names(v)) {
         categories[i] <- paste(lapply(v$categories, function(cat) { cat$name }), collapse = "|")
         categories.missing[i] <- paste(lapply(v$categories, function(cat) { cat$missing }), collapse = "|")
-        categories.label[i] <- paste(lapply(v$categories, function(cat) { 
+        categories.label[i] <- paste(lapply(v$categories, function(cat) {
           labels <- cat$attributes[lapply(cat$attributes, function(attr) { attr$name }) == "label"]
           if (length(labels)>0) {
             .extractLabel(locale, labels[[1]]$values)
@@ -100,8 +100,8 @@ mica.variables <- function(mica, query="variable()",
         }
       }
     }
-    df <- data.frame(id, name, valueType, nature, categories, categories.missing, categories.label, 
-                     variableType, label, description, datasetId, studyId, populationId, dceId, 
+    df <- data.frame(id, name, valueType, nature, categories, categories.missing, categories.label,
+                     variableType, label, description, datasetId, studyId, populationId, dceId,
                      mimeType, unit, referencedEntityType, repeatable, occurrenceGroup)
     for (key in c("label", "categories", "categories.missing", "categories.label", "populationId", "dceId", "valueType", "nature", "mimeType", "unit", "referencedEntityType", "repeatable", "occurrenceGroup")) {
       if (all(is.na(df[key]))) {

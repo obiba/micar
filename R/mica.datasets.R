@@ -1,15 +1,15 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2019 OBiBa. All rights reserved.
-#  
+#
 # This program and the accompanying materials
 # are made available under the terms of the GNU Public License v3.0.
-#  
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
 #' Get the datasets
-#' 
+#'
 #' @title Get the datasets
 #' @param mica A Mica object
 #' @param query The search query
@@ -19,15 +19,15 @@
 #' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
-#' @examples 
+#' @examples
 #' \dontrun{
 #' m <- mica.login("https://mica-demo.obiba.org")
 #' mica.datasets(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))")
 #' mica.logout(m)
 #' }
 #' @export
-mica.datasets <- function(mica, query="dataset()", 
-                          select=list("*"), sort=list("id"), 
+mica.datasets <- function(mica, query="dataset()",
+                          select=list("*"), sort=list("id"),
                           from=0, limit=10000, locale="en", df=TRUE) {
   q <- .append.rql(query, "dataset", select, sort, from, limit, locale)
   res <- .post(mica, "datasets", "_rql", query=list(query=q))
@@ -35,7 +35,7 @@ mica.datasets <- function(mica, query="dataset()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["datasetResultDto"]][["obiba.mica.DatasetResultDto.result"]][["datasets"]]
+  summaries <- res[["datasetResultDto"]][["datasetResult"]][["datasets"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
@@ -58,15 +58,15 @@ mica.datasets <- function(mica, query="dataset()",
       description[i] <- .extractLabel(locale, d[["description"]])
       variableType[i] <- d[["variableType"]]
       entityType[i] <- d[["entityType"]]
-      if (!is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]]) && !is.null(d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]])) {
+      if (!is.null(d[["protocol"]]) && !is.null(d[["protocol"]][["harmonizationTable"]])) {
         hasStudyId <- TRUE
-        studyId[i] <- d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]][["studyId"]]
-        populationId[i] <- paste0(studyId[i], ":", d[["obiba.mica.HarmonizedDatasetDto.type"]][["harmonizationTable"]][["populationId"]])
-      } else if (!is.null(d[["obiba.mica.CollectedDatasetDto.type"]]) && !is.null(d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]])) {
+        studyId[i] <- d[["protocol"]][["harmonizationTable"]][["studyId"]]
+        populationId[i] <- paste0(studyId[i], ":", d[["protocol"]][["harmonizationTable"]][["populationId"]])
+      } else if (!is.null(d[["collected"]]) && !is.null(d[["collected"]][["studyTable"]])) {
         hasStudyId <- TRUE
-        studyId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["studyId"]]
-        populationId[i] <- paste0(studyId[i], ":", d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["populationId"]])
-        dceId[i] <- d[["obiba.mica.CollectedDatasetDto.type"]][["studyTable"]][["dceId"]]
+        studyId[i] <- d[["collected"]][["studyTable"]][["studyId"]]
+        populationId[i] <- paste0(studyId[i], ":", d[["collected"]][["studyTable"]][["populationId"]])
+        dceId[i] <- d[["collected"]][["studyTable"]][["dceId"]]
       }
       if (!is.null(d[["content"]])) {
         ct <- .flatten(jsonlite::fromJSON(d[["content"]], simplifyDataFrame = FALSE), locale)
@@ -79,7 +79,7 @@ mica.datasets <- function(mica, query="dataset()",
           model[[key]][i] <- ct[[key]]
         }
       }
-      counts <- d[["obiba.mica.CountStatsDto.datasetCountStats"]]
+      counts <- d[["countStats"]]
       variables[i] <- .nullToNA(counts[["variables"]])
       networks[i] <- .nullToNA(counts[["networks"]])
     }

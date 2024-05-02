@@ -1,15 +1,15 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2019 OBiBa. All rights reserved.
-#  
+#
 # This program and the accompanying materials
 # are made available under the terms of the GNU Public License v3.0.
-#  
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
 #' Get the study data collection events (DCEs). Note that the DCEs are not fetched directly, they are extracted from study search results.
-#' 
+#'
 #' @title Get the study data collection events
 #' @family studies functions
 #' @param mica A Mica object
@@ -20,7 +20,7 @@
 #' @param limit Max number of items. Note that this limit applies to the studies that are fetched, the resulting count of DCEs will be higher.
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
-#' @examples 
+#' @examples
 #' \dontrun{
 #' m <- mica.login("https://mica-demo.obiba.org")
 #' mica.study.dces(m, query="study(in(Mica_study.methods-design,cohort_study))")
@@ -28,8 +28,8 @@
 #' }
 #' @export
 mica.study.dces <- function(mica, query="study()",
-                         select=list("populations.dataCollectionEvents"), 
-                         sort=list("id"), 
+                         select=list("populations.dataCollectionEvents"),
+                         sort=list("id"),
                          from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "study", select, sort, from, limit, locale)
   res <- .post(mica, "studies", "_rql", query=list(query=q))
@@ -37,7 +37,7 @@ mica.study.dces <- function(mica, query="study()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["studyResultDto"]][["obiba.mica.StudyResultDto.result"]][["summaries"]]
+  summaries <- res[["studyResultDto"]][["studyResult"]][["summaries"]]
   if (length(summaries)>0) {
     # get the count of DCEs
     dcesCount <- 0

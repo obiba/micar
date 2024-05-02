@@ -1,24 +1,24 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2019 OBiBa. All rights reserved.
-#  
+#
 # This program and the accompanying materials
 # are made available under the terms of the GNU Public License v3.0.
-#  
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
 #' Open a connection with Mica and returns a Mica object. When the two-factor
-#' authentication mechanism is enabled, the user will be prompt for one-time password input. 
-#' 
+#' authentication mechanism is enabled, the user will be prompt for one-time password input.
+#'
 #' @title Open connection with Mica
-#' 
+#'
 #' @return A Mica object.
 #' @param username User name in mica. Can be provided by "mica.username" option.
 #' @param password User password in mica. Can be provided by "mica.password" option.
 #' @param url Mica url or list of mica urls. Can be provided by "mica.url" option. Secure http (https) connection is required.
 #' @param opts Curl options. Can be provided by "mica.opts" option.
-#' @examples 
+#' @examples
 #' \dontrun{
 #' # login using credentials from mica.username and mica.password options
 #' m <- mica.login("https://mica-demo.obiba.org")
@@ -29,14 +29,15 @@
 mica.login <- function(username=getOption("mica.username", "anonymous"), password=getOption("mica.password", "password"), url=getOption("mica.url"), opts=getOption("mica.opts", list())) {
   if (is.null(url)) stop("mica url is required", call.=FALSE)
   micaUrl <- url
-  if (startsWith(url, "http://localhost:8082")) {
-    micaUrl <- gsub("http://localhost:8082", "https://localhost:8445", url)
-    warning("Deprecation: connecting through secure http is required. Replacing http://localhost:8082 by https://localhost:8445.")
-  } else if (startsWith(url, "http://")) {
-    stop("Deprecation: connecting through secure http is required.")
-  }
+  # if (startsWith(url, "http://localhost:8082")) {
+  #   micaUrl <- gsub("http://localhost:8082", "https://localhost:8445", url)
+  #   warning("Deprecation: connecting through secure http is required. Replacing http://localhost:8082 by https://localhost:8445.")
+  # } else if (startsWith(url, "http://")) {
+  #   stop("Deprecation: connecting through secure http is required.")
+  # }
   urlObj <- httr::parse_url(micaUrl)
-  
+  # add a echo so I can see the url
+
   mica <- new.env(parent=globalenv())
   # Username
   mica$username <- username
@@ -49,34 +50,37 @@ mica.login <- function(username=getOption("mica.username", "anonymous"), passwor
   # Authorization
   mica$authorization <- .authToken(username, password)
   class(mica) <- "mica"
-  
+
   options <- opts
   if (urlObj$hostname == "localhost" && length(options) == 0) {
     options <- list(ssl_verifyhost=F, ssl_verifypeer=F)
   }
-  
+
   mica$httrConfig <- config()
   mica$httrConfig$options <- options
   r <- GET(.url(mica, "config"), config = mica$httrConfig, httr::add_headers(Authorization = mica$authorization), .verbose())
+
   if (httr::status_code(r) == 401) {
     headers <- httr::headers(r)
     optHeader <- headers[tolower('WWW-Authenticate')]
     if (optHeader == 'X-Obiba-TOTP') {
+        cat("Has TOTP\n")
+
       # TOTP code is required
       code <- readline(prompt = 'Enter 6-digits code: ')
       r <- GET(.url(mica, "config"), config = mica$httrConfig, httr::add_headers(Authorization = mica$authorization, 'X-Obiba-TOTP' = code), .verbose())
     }
   }
   mica$config <- .handleResponse(mica, r)
-  
+
   mica
 }
 
 #' Close connection and release resources of Mica.
-#' 
+#'
 #' @title Close connection with Mica
 #' @param mica A Mica object
-#' @examples 
+#' @examples
 #' \dontrun{
 #' m <- mica.login("https://mica-demo.obiba.org")
 #' mica.logout(m)
@@ -175,7 +179,7 @@ print.mica <- function(x, ...) {
           if (is.null(rval[[subn]])) {
             rval[[subn]] <- subct[[subn]]
           } else {
-            rval[[subn]] <- paste0(rval[[subn]], "|", subct[[subn]])  
+            rval[[subn]] <- paste0(rval[[subn]], "|", subct[[subn]])
           }
         }
       }
@@ -195,7 +199,7 @@ print.mica <- function(x, ...) {
           rval[[k]] <- subct[[subn]]
         }
       }
-    }  
+    }
   }
   rval
 }
@@ -241,7 +245,7 @@ print.mica <- function(x, ...) {
       if ("message" %in% names(content)) {
         stop(content$message, call.=FALSE)
       } else {
-        stop(content$error, call.=FALSE)  
+        stop(content$error, call.=FALSE)
       }
     } else {
       stop(response$status, call.=FALSE)

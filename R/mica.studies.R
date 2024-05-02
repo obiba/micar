@@ -1,15 +1,15 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2019 OBiBa. All rights reserved.
-#  
+#
 # This program and the accompanying materials
 # are made available under the terms of the GNU Public License v3.0.
-#  
+#
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #-------------------------------------------------------------------------------
 
 #' Get the studies
-#' 
+#'
 #' @title Get the studies
 #' @family studies functions
 #' @param mica A Mica object
@@ -20,17 +20,17 @@
 #' @param limit Max number of items
 #' @param locale The language for labels (default is "en")
 #' @param df Return a data.frame (default is TRUE)
-#' @examples 
+#' @examples
 #' \dontrun{
 #' m <- mica.login("https://mica-demo.obiba.org")
-#' mica.studies(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))", 
+#' mica.studies(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))",
 #'   locale="en", from=0, limit=10)
 #' mica.logout(m)
 #' }
 #' @export
 mica.studies <- function(mica, query="study()",
-                         select=list("acronym","name","objectives","model","populations.dataCollectionEvents.model.dataSources"), 
-                         sort=list("id"), 
+                         select=list("acronym","name","objectives","model","populations.dataCollectionEvents.model.dataSources"),
+                         sort=list("id"),
                          from=0, limit=100, locale="en", df=TRUE) {
   q <- .append.rql(query, "study", select, sort, from, limit, locale)
   res <- .post(mica, "studies", "_rql", query=list(query=q))
@@ -38,7 +38,7 @@ mica.studies <- function(mica, query="study()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["studyResultDto"]][["obiba.mica.StudyResultDto.result"]][["summaries"]]
+  summaries <- res[["studyResultDto"]][["studyResult"]][["summaries"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
@@ -59,7 +59,7 @@ mica.studies <- function(mica, query="study()",
       name[i] <- .extractLabel(locale, s[["name"]])
       acronym[i] <- .extractLabel(locale, s[["acronym"]])
       objectives[i] <- .extractLabel(locale, s[["objectives"]])
-      design[i] <- .nullToNA(s[["design"]]) 
+      design[i] <- .nullToNA(s[["design"]])
       targetNumber[i] <- .nullToNA(s[["targetNumber"]][["number"]])
       if (!is.null(s[["dataSources"]])) {
         for (ds in s[["dataSources"]]) {
@@ -83,7 +83,7 @@ mica.studies <- function(mica, query="study()",
           model[[key]][i] <- ct[[key]]
         }
       }
-      counts <- s[["obiba.mica.CountStatsDto.studyCountStats"]]
+      counts <- s[["countStats"]]
       variables[i] <- .nullToNA(counts[["variables"]])
       collectedDatasets[i] <- .nullToNA(counts[["studyDatasets"]])
       collectedVariables[i] <- .nullToNA(counts[["studyVariables"]])
