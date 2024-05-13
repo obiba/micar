@@ -35,7 +35,8 @@ mica.networks <- function(mica, query="network()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["networkResultDto"]][["networkResult"]][["networks"]]
+  resultPropName <- ifelse(mica$needsLegacySupport, "obiba.mica.NetworkResultDto.result", "networkResult")
+  summaries <- res[["networkResultDto"]][[resultPropName]][["networks"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
@@ -68,7 +69,8 @@ mica.networks <- function(mica, query="network()",
             model[[key]][i] <- ct[[key]]
           }
         }
-        counts <- n[["countStats"]]
+        countsPropName <- ifelse(mica$needsLegacySupport, "obiba.mica.CountStatsDto.networkCountStats", "countStats")
+        counts <- n[[countsPropName]]
         studies[i] <- .nullToNA(counts[["studies"]])
         variables[i] <- .nullToNA(counts[["variables"]])
         collectedDatasets[i] <- .nullToNA(counts[["studyDatasets"]])

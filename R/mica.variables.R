@@ -36,7 +36,8 @@ mica.variables <- function(mica, query="variable()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["variableResultDto"]][["variableResult"]][["summaries"]]
+  resultPropName <- ifelse(mica$needsLegacySupport, "obiba.mica.DatasetVariableResultDto.result", "variableResult")
+  summaries <- res[["variableResultDto"]][[resultPropName]][["summaries"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
