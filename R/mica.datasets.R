@@ -35,7 +35,8 @@ mica.datasets <- function(mica, query="dataset()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["datasetResultDto"]][["datasetResult"]][["datasets"]]
+  resultPropName <- ifelse(mica$needsLegacySupport, "obiba.mica.DatasetResultDto.result", "datasetResult")
+  summaries <- res[["datasetResultDto"]][[resultPropName]][["datasets"]]
   if (length(summaries)>0) {
     id <- rep(NA, length(summaries))
     name <- rep(NA, length(summaries))
@@ -58,15 +59,17 @@ mica.datasets <- function(mica, query="dataset()",
       description[i] <- .extractLabel(locale, d[["description"]])
       variableType[i] <- d[["variableType"]]
       entityType[i] <- d[["entityType"]]
-      if (!is.null(d[["protocol"]]) && !is.null(d[["protocol"]][["harmonizationTable"]])) {
+      harmonizedTypePropName <- ifelse(mica$needsLegacySupport, "obiba.mica.HarmonizedDatasetDto.type", "protocol")
+      collectedTypePropName <- ifelse(mica$needsLegacySupport, "obiba.mica.CollectedDatasetDto.type", "collected")
+      if (!is.null(d[[harmonizedTypePropName]]) && !is.null(d[[harmonizedTypePropName]][["harmonizationTable"]])) {
         hasStudyId <- TRUE
-        studyId[i] <- d[["protocol"]][["harmonizationTable"]][["studyId"]]
-        populationId[i] <- paste0(studyId[i], ":", d[["protocol"]][["harmonizationTable"]][["populationId"]])
-      } else if (!is.null(d[["collected"]]) && !is.null(d[["collected"]][["studyTable"]])) {
+        studyId[i] <- d[[harmonizedTypePropName]][["harmonizationTable"]][["studyId"]]
+        populationId[i] <- paste0(studyId[i], ":", d[[harmonizedTypePropName]][["harmonizationTable"]][["populationId"]])
+      } else if (!is.null(d[[collectedTypePropName]]) && !is.null(d[[collectedTypePropName]][["studyTable"]])) {
         hasStudyId <- TRUE
-        studyId[i] <- d[["collected"]][["studyTable"]][["studyId"]]
-        populationId[i] <- paste0(studyId[i], ":", d[["collected"]][["studyTable"]][["populationId"]])
-        dceId[i] <- d[["collected"]][["studyTable"]][["dceId"]]
+        studyId[i] <- d[[collectedTypePropName]][["studyTable"]][["studyId"]]
+        populationId[i] <- paste0(studyId[i], ":", d[[collectedTypePropName]][["studyTable"]][["populationId"]])
+        dceId[i] <- d[[collectedTypePropName]][["studyTable"]][["dceId"]]
       }
       if (!is.null(d[["content"]])) {
         ct <- .flatten(jsonlite::fromJSON(d[["content"]], simplifyDataFrame = FALSE), locale)
@@ -79,7 +82,8 @@ mica.datasets <- function(mica, query="dataset()",
           model[[key]][i] <- ct[[key]]
         }
       }
-      counts <- d[["countStats"]]
+      countsPropName <- ifelse(mica$needsLegacySupport, "obiba.mica.CountStatsDto.datasetCountStats", "countStats")
+      counts <- d[[countsPropName]]
       variables[i] <- .nullToNA(counts[["variables"]])
       networks[i] <- .nullToNA(counts[["networks"]])
     }

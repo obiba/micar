@@ -238,6 +238,8 @@ print.mica <- function(x, ...) {
   if (is.null(mica$version) || is.na(mica$version)) {
     headers <- httr::headers(response)
     mica$version <- as.character(headers[tolower('X-Mica-Version')])
+    versionInfo <- scan(text = mica$version, what = numeric(), sep = ".", n = 2)
+    mica$needsLegacySupport <- versionInfo[1] <= 5 && versionInfo[2] < 5
   }
   content <- content(response)
   if (response$status>=300) {

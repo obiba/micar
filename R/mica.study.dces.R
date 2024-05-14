@@ -37,7 +37,8 @@ mica.study.dces <- function(mica, query="study()",
     return(res)
   }
   .reportListMetrics(res)
-  summaries <- res[["studyResultDto"]][["studyResult"]][["summaries"]]
+  resultPropName <- ifelse(mica$needsLegacySupport, "obiba.mica.StudyResultDto.result", "studyResult")
+  summaries <- res[["studyResultDto"]][[resultPropName]][["summaries"]]
   if (length(summaries)>0) {
     # get the count of DCEs
     dcesCount <- 0
