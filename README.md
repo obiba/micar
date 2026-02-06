@@ -10,15 +10,9 @@ R package for accessing Mica2 web services:
 
 ## Installation
 
-Requires R 3.x.
-
 ```
-# Install dependencies
-if (!require("httr")) {
-  install.package(c("httr"), dependencies=TRUE)
-}
-# Install from source code repository
-devtools::install_github("obiba/micar")
+# Install from CRAN
+install.package("micar")
 ```
 ## Usage
 

@@ -39,7 +39,7 @@ Get the studies
 \examples{
 \dontrun{
 m <- mica.login("https://mica-demo.obiba.org")
-mica.studies(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))", 
+mica.studies(m, query="variable(in(Mlstr_area.Lifestyle_behaviours,Drugs))",
   locale="en", from=0, limit=10)
 mica.logout(m)
 }

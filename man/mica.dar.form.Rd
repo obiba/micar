@@ -21,18 +21,18 @@ mica.logout(m)
 }
 \seealso{
 Other data access requests functions: 
+\code{\link{mica.dar}()},
 \code{\link{mica.dar.actions}()},
 \code{\link{mica.dar.agreements}()},
+\code{\link{mica.dar.amendment}()},
 \code{\link{mica.dar.amendment.form}()},
 \code{\link{mica.dar.amendment.history}()},
-\code{\link{mica.dar.amendments.history}()},
 \code{\link{mica.dar.amendments}()},
-\code{\link{mica.dar.amendment}()},
+\code{\link{mica.dar.amendments.history}()},
 \code{\link{mica.dar.history}()},
 \code{\link{mica.dar.preliminaries}()},
-\code{\link{mica.dar.preliminary.history}()},
 \code{\link{mica.dar.preliminary}()},
-\code{\link{mica.dars}()},
-\code{\link{mica.dar}()}
+\code{\link{mica.dar.preliminary.history}()},
+\code{\link{mica.dars}()}
 }
 \concept{data access requests functions}
